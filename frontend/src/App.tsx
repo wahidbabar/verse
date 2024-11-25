@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import "./App.css";
-import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import { AuthProvider } from "./context/AuthContext";
 import Loading from "./components/Loading";
+import Navbar from "./components/Navbar";
+import { AuthProvider } from "./context/AuthContext";
 
 const App: FC = () => {
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ const App: FC = () => {
       <AuthProvider>
         <div className="min-h-screen flex flex-col">
           <Navbar />
-          <main className="flex-grow">
+          <main className="flex-grow px-10">
             <Outlet />
           </main>
           <Footer />

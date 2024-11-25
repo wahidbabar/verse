@@ -1,15 +1,65 @@
-import React from 'react';
+import {
+  CreateBookRequest,
+  UpdateBookRequest,
+} from "@/redux/features/books/booksApi";
 
-const InputField = ({ label, name, type = 'text', register, placeholder }) => {
+interface InputFieldProps {
+  label: string;
+  name: keyof CreateBookRequest | keyof UpdateBookRequest;
+  type?: "text" | "textarea" | "number";
+  placeholder?: string;
+  register: any;
+  errors: any;
+  validation?: any;
+}
+
+const InputField: React.FC<InputFieldProps> = ({
+  label,
+  name,
+  type = "text",
+  placeholder,
+  register,
+  errors,
+  validation = {},
+}) => {
   return (
     <div className="mb-4">
-      <label className="block text-sm font-semibold text-gray-700">{label}</label>
-      <input
-        type={type}
-        {...register(name,  { required: true })}
-        className=" p-2 border w-full rounded-md focus:outline-none focus:ring focus:border-blue-300"
-        placeholder={placeholder}
-      />
+      <label
+        htmlFor={name}
+        className="block text-sm font-semibold text-gray-700 mb-2"
+      >
+        {label}
+      </label>
+      {type === "textarea" ? (
+        <textarea
+          id={name}
+          {...register(name, validation)}
+          placeholder={placeholder}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 
+            ${
+              errors[name]
+                ? "border-red-500 focus:ring-red-300"
+                : "border-gray-300 focus:ring-blue-300"
+            }`}
+          rows={4}
+        />
+      ) : (
+        <input
+          type={type}
+          id={name}
+          {...register(name, validation)}
+          placeholder={placeholder}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 
+            ${
+              errors[name]
+                ? "border-red-500 focus:ring-red-300"
+                : "border-gray-300 focus:ring-blue-300"
+            }`}
+        />
+      )}
+      {errors[name] && (
+        <p className="text-red-500 text-xs mt-1">{errors[name].message}</p>
+      )}
     </div>
   );
 };

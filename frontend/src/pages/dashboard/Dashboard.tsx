@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<DashboardData>(
-          `${getBaseUrl()}/api/admin`,
+          `${getBaseUrl()}/api/admin/stats`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

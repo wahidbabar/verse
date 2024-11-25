@@ -4,27 +4,16 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { AppDispatch } from "../../redux/store";
-
-export interface Book {
-  _id: string;
-  title: string;
-  description: string;
-  category: string;
-  trending: boolean;
-  coverImage: string;
-  oldPrice: number;
-  newPrice: number;
-  createdAtNow?: string;
-}
+import { IBook } from "@/redux/features/books/booksApi";
 
 interface BookCardProps {
-  book: Book;
+  book: IBook;
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleAddToCart = (product: Book): void => {
+  const handleAddToCart = (product: IBook): void => {
     dispatch(addToCart(product));
   };
 

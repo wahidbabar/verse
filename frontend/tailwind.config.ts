@@ -13,6 +13,9 @@ export default {
         primary: ["Montserrat", "sans-serif"],
         secondary: ["Nunito Sans", "sans-serif"],
       },
+      screens: {
+        "4xl": "1920px",
+      },
     },
   },
   plugins: [],

@@ -1,16 +1,12 @@
 import { HiOutlineUser } from "react-icons/hi";
-import {
-  HiMiniBars3CenterLeft,
-  HiOutlineHeart,
-  HiOutlineShoppingCart,
-} from "react-icons/hi2";
+import { HiOutlineHeart, HiOutlineShoppingCart } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
+import { RootState } from "@/redux/store";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useAuth } from "../context/AuthContext";
-import { RootState } from "@/redux/store";
 
 const navigation = [
   { name: "Dashboard", href: "/user-dashboard" },
@@ -32,41 +28,39 @@ const Navbar = () => {
   const token = localStorage.getItem("token");
 
   return (
-    <header className="max-w-screen-2xl mx-auto px-4 py-6">
-      <nav className="flex justify-between items-center">
-        {/* left side */}
-        <div className="flex items-center md:gap-16 gap-4">
-          <Link to="/">
-            <HiMiniBars3CenterLeft className="size-6" />
+    <header className="w-full max-w-screen-4xl mx-auto px-10 py-6">
+      <nav className="flex justify-between items-center space-x-8">
+        {/* Logo and Search bar */}
+        <div className="flex items-center space-x-6">
+          <Link
+            to="/"
+            className="font-extrabold text-2xl tracking-widest text-primary"
+          >
+            VERSE
           </Link>
 
-          {/* search input */}
-          <div className="relative sm:w-72 w-40 space-x-2">
-            <IoSearchOutline className="absolute inline-block left-3 inset-y-2" />
-
+          <div className="sm:w-80 w-52 px-4 py-2 flex items-center bg-gray-200 rounded-md shadow-md">
+            <IoSearchOutline className="text-lg text-gray-600" />
             <input
               type="text"
               placeholder="Search here"
-              className="bg-[#EAEAEA] w-full py-1 md:px-8 px-6 rounded-md focus:outline-none"
+              className="w-full py-1 px-4 focus:outline-none bg-transparent text-sm text-gray-700 placeholder-gray-400"
             />
           </div>
         </div>
 
-        {/* rigth side */}
-        <div className="relative flex items-center md:space-x-3 space-x-2">
-          <div>
+        {/* Right section (Profile, Heart, Cart) */}
+        <div className="flex items-center space-x-6">
+          <div className="relative">
             {currentUser ? (
               <>
                 <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                   <img
-                    src="assets/avatar.png"
-                    alt=""
-                    className={`size-7 rounded-full ${
-                      currentUser ? "ring-2 ring-blue-500" : ""
-                    }`}
+                    src="/assets/avatar.png"
+                    alt="User Avatar"
+                    className="w-10 h-10 rounded-full ring-2 ring-blue-500"
                   />
                 </button>
-                {/* show dropdowns */}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40">
                     <ul className="py-2">
@@ -77,7 +71,7 @@ const Navbar = () => {
                         >
                           <Link
                             to={item.href}
-                            className="block px-4 py-2 text-sm hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm hover:bg-gray-100 text-gray-700"
                           >
                             {item.name}
                           </Link>
@@ -86,7 +80,7 @@ const Navbar = () => {
                       <li>
                         <button
                           onClick={handleLogOut}
-                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-gray-700"
                         >
                           Logout
                         </button>
@@ -96,33 +90,30 @@ const Navbar = () => {
                 )}
               </>
             ) : token ? (
-              <Link to="/dashboard" className="border-b-2 border-primary">
+              <Link to="/dashboard" className="text-primary font-semibold">
                 Dashboard
               </Link>
             ) : (
-              <Link to="/login">
-                {" "}
-                <HiOutlineUser className="size-6" />
+              <Link to="/login" className="text-primary">
+                <HiOutlineUser className="text-xl" />
               </Link>
             )}
           </div>
 
+          {/* Heart icon */}
           <button className="hidden sm:block">
-            <HiOutlineHeart className="size-6" />
+            <HiOutlineHeart className="text-xl text-gray-600" />
           </button>
 
+          {/* Cart */}
           <Link
             to="/cart"
-            className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm"
+            className="bg-primary text-white py-2 px-4 flex items-center rounded-md hover:bg-primary-dark"
           >
-            <HiOutlineShoppingCart className="" />
-            {cartItems.length > 0 ? (
-              <span className="text-sm font-semibold sm:ml-1">
-                {cartItems.length}
-              </span>
-            ) : (
-              <span className="text-sm font-semibold sm:ml-1">0</span>
-            )}
+            <HiOutlineShoppingCart className="text-xl" />
+            <span className="ml-1 text-sm font-semibold">
+              {cartItems.length > 0 ? cartItems.length : 0}
+            </span>
           </Link>
         </div>
       </nav>

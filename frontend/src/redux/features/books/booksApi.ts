@@ -1,27 +1,52 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import getBaseUrl from "@/utils/baseURL";
 
-export interface Book {
+// Shared interfaces
+export interface IBook {
   _id: string;
   title: string;
+  author: string;
   description: string;
   category: string;
-  trending: boolean;
+  trending?: boolean;
   coverImage: string;
-  oldPrice: number;
+  oldPrice?: number;
   newPrice: number;
-  createdAtNow?: string;
+  createdAt?: string;
 }
 
-interface UpdateBookRequest {
+// Request interfaces
+export interface CreateBookRequest {
+  title: string;
+  author: string;
+  description: string;
+  category: string;
+  trending?: boolean;
+  coverImage: string;
+  oldPrice?: number;
+  newPrice: number;
+}
+
+export interface UpdateBookRequest {
   id: string;
-  title?: string;
-  author?: string;
-  price?: number;
-  description?: string;
-  image?: string;
-  category?: string;
-  publishedDate?: string;
+  title: string;
+  author: string;
+  description: string;
+  category: string;
+  trending?: boolean;
+  coverImage: string;
+  oldPrice?: number;
+  newPrice: number;
+}
+
+// Response interfaces
+interface BookResponse {
+  message: string;
+  book: IBook;
+}
+
+interface BooksResponse {
+  books: IBook[];
 }
 
 const baseQuery = fetchBaseQuery({
@@ -41,15 +66,15 @@ const booksApi = createApi({
   baseQuery,
   tagTypes: ["Books"],
   endpoints: (builder) => ({
-    fetchAllBooks: builder.query<Book[], void>({
+    fetchAllBooks: builder.query<BooksResponse, void>({
       query: () => "/",
       providesTags: ["Books"],
     }),
-    fetchBookById: builder.query<Book, string>({
+    fetchBookById: builder.query<BookResponse, string>({
       query: (id) => `/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Books", id }],
     }),
-    addBook: builder.mutation<Book, Partial<Book>>({
+    addBook: builder.mutation<BookResponse, CreateBookRequest>({
       query: (newBook) => ({
         url: `/create-book`,
         method: "POST",
@@ -57,7 +82,7 @@ const booksApi = createApi({
       }),
       invalidatesTags: ["Books"],
     }),
-    updateBook: builder.mutation<Book, UpdateBookRequest>({
+    updateBook: builder.mutation<BookResponse, UpdateBookRequest>({
       query: ({ id, ...rest }) => ({
         url: `/edit/${id}`,
         method: "PUT",
@@ -68,7 +93,7 @@ const booksApi = createApi({
       }),
       invalidatesTags: ["Books"],
     }),
-    deleteBook: builder.mutation<void, string>({
+    deleteBook: builder.mutation<BookResponse, string>({
       query: (id) => ({
         url: `/${id}`,
         method: "DELETE",

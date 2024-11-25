@@ -1,20 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
-
-interface Book {
-  _id: string;
-  title: string;
-  description: string;
-  category: string;
-  trending: boolean;
-  coverImage: string;
-  oldPrice: number;
-  newPrice: number;
-  createdAtNow?: string;
-}
+import { IBook } from "../books/booksApi";
 
 interface CartState {
-  cartItems: Book[];
+  cartItems: IBook[];
 }
 
 const initialState: CartState = {
@@ -25,7 +14,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<Book>) => {
+    addToCart: (state, action: PayloadAction<IBook>) => {
       const existingItem = state.cartItems.find(
         (item) => item._id === action.payload._id
       );
@@ -50,7 +39,7 @@ const cartSlice = createSlice({
         });
       }
     },
-    removeFromCart: (state, action: PayloadAction<Book>) => {
+    removeFromCart: (state, action: PayloadAction<IBook>) => {
       state.cartItems = state.cartItems.filter(
         (item) => item._id !== action.payload._id
       );

@@ -1,23 +1,29 @@
-import React, { useEffect, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
-import { Pagination, Navigation } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 
 // Import Swiper styles
+import { FiLoader } from "react-icons/fi";
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
-import BookCard from "../books/BookCard";
+import "swiper/css/pagination";
 import { useFetchAllBooksQuery } from "../../redux/features/books/booksApi";
+import BookCard from "../books/BookCard";
 
 const Recommend = () => {
-  const { data: books = [] } = useFetchAllBooksQuery();
+  const { data } = useFetchAllBooksQuery();
+
+  if (!data) {
+    <div className="h-full flex items-center justify-center">
+      <FiLoader className="size-5 animate-spin text-muted-foreground" />
+    </div>;
+  }
+
   return (
     <div className="py-16">
       <h2 className="text-3xl font-semibold mb-6">Recommended for you </h2>
-
       <Swiper
         slidesPerView={1}
         spaceBetween={30}
@@ -43,8 +49,8 @@ const Recommend = () => {
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        {books.length > 0 &&
-          books.slice(8, 18).map((book, index) => (
+        {data?.books.length! > 0 &&
+          data?.books.slice(8, 18).map((book, index) => (
             <SwiperSlide key={index}>
               <BookCard book={book} />
             </SwiperSlide>

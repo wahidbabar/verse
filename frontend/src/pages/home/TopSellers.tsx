@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useFetchAllBooksQuery } from "../../redux/features/books/booksApi";
+import { FiLoader } from "react-icons/fi";
 
 const categories = [
   "Choose a genre",
@@ -29,14 +30,18 @@ const categories = [
 const TopSellers = () => {
   const [selectedCategory, setSelectedCategory] = useState("Choose a genre");
 
-  const { data: books = [] } = useFetchAllBooksQuery();
+  const { data: books } = useFetchAllBooksQuery();
+
+  if (!books) {
+    <div className="h-full flex items-center justify-center">
+      <FiLoader className="size-5 animate-spin text-muted-foreground" />
+    </div>;
+  }
 
   const filteredBooks =
     selectedCategory === "Choose a genre"
-      ? books
-      : books.filter((book) => book.category === selectedCategory);
-
-  console.log(filteredBooks);
+      ? books?.books
+      : books?.books.filter((book) => book.category === selectedCategory);
 
   return (
     <div className="py-10">
@@ -82,8 +87,8 @@ const TopSellers = () => {
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        {filteredBooks.length > 0 &&
-          filteredBooks.map((book, index) => (
+        {filteredBooks?.length! > 0 &&
+          filteredBooks?.map((book, index) => (
             <SwiperSlide key={index}>
               <BookCard book={book} />
             </SwiperSlide>
