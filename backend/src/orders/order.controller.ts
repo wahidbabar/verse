@@ -28,7 +28,7 @@ const getOrderByEmail = async (req: Request, res: Response): Promise<void> => {
     const { email } = req.params;
     const orders = await Order.find({ email })
       .sort({ createdAt: -1 })
-      .populate("productIds"); // Optional: populate product details
+      .populate("productIds");
 
     if (!orders || orders.length === 0) {
       res.status(404).json({ message: "No orders found for this email" });

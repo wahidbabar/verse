@@ -22,9 +22,9 @@ const Recommend = () => {
   }
 
   if (!books) {
-    <div className="h-full flex flex-1 items-center justify-center flex-col gap-2">
-      <FiAlertTriangle className="size-5 text-muted-foreground" />
-      <span className="text-sm text-muted-foreground">No channel found</span>
+    <div className="h-screen flex flex-1 items-center justify-center flex-col gap-2">
+      <FiAlertTriangle className="size-8 text-muted-foreground" />
+      <span className="text-sm text-muted-foreground">No books found</span>
     </div>;
   }
 

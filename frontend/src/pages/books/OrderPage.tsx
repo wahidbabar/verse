@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { useGetOrdersByEmail } from "@/api/orders";
+import { FiAlertTriangle } from "react-icons/fi";
 
 const OrderPage = () => {
   const { currentUser } = useAuth();
@@ -46,12 +47,16 @@ const OrderPage = () => {
       </div>
     );
 
-  if (isError)
+  if (isError) {
     return (
-      <div className="flex justify-center items-center h-screen text-red-500 text-xl">
-        Error getting orders data
+      <div className="h-screen flex flex-1 items-center justify-center flex-col gap-2">
+        <FiAlertTriangle className="size-8 text-muted-foreground" />
+        <span className="text-base text-muted-foreground">
+          No orders found for this user
+        </span>
       </div>
     );
+  }
 
   const toggleOrderExpand = (orderId: string) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
