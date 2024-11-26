@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "../../../context/AuthContext";
-import { useGetOrderByEmailQuery } from "../../../redux/features/orders/ordersApi";
+import { useGetOrdersByEmail } from "@/api/orders";
 
 interface Address {
   city: string;
@@ -34,7 +34,7 @@ const UserDashboard: React.FC = () => {
     data: orders = [],
     isLoading,
     isError,
-  } = useGetOrderByEmailQuery(currentUser?.email!) as OrderQueryResponse;
+  } = useGetOrdersByEmail(currentUser?.email!) as OrderQueryResponse;
 
   if (isLoading || loadingUser) {
     return <div>Loading...</div>;

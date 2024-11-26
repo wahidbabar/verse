@@ -1,7 +1,4 @@
-import {
-  CreateBookRequest,
-  UpdateBookRequest,
-} from "@/redux/features/books/booksApi";
+import { CreateBookRequest, UpdateBookRequest } from "@/api/types";
 
 interface InputFieldProps {
   label: string;

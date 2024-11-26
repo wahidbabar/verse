@@ -1,24 +1,23 @@
-import { type RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import useCartStore from "@/store/cart-store";
+import { IBook } from "@/api/types";
 import { Link } from "react-router-dom";
-import { clearCart, removeFromCart } from "../../redux/features/cart/cartSlice";
-import { Book } from "./BookCard";
 
 const CartPage = () => {
-  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-  const dispatch = useDispatch();
+  const { cartItems, removeFromCart, clearCart } = useCartStore();
 
   const totalPrice = cartItems
     .reduce((acc, item) => acc + item.newPrice, 0)
     .toFixed(2);
 
-  const handleRemoveFromCart = (product: Book) => {
-    dispatch(removeFromCart(product));
+  const handleRemoveFromCart = (product: IBook) => {
+    removeFromCart(product);
   };
 
+  // Clear cart handler
   const handleClearCart = () => {
-    dispatch(clearCart());
+    clearCart();
   };
+
   return (
     <>
       <div className="flex mt-12 h-full flex-col overflow-hidden bg-white shadow-xl">
@@ -42,12 +41,11 @@ const CartPage = () => {
             <div className="flow-root">
               {cartItems.length > 0 ? (
                 <ul role="list" className="-my-6 divide-y divide-gray-200">
-                  {cartItems.map((product: Book) => (
+                  {cartItems.map((product: IBook) => (
                     <li key={product?._id} className="flex py-6">
                       <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                         <img
                           alt=""
-                          //   src={`${getImgUrl(product?.coverImage)}`}
                           src={product.coverImage}
                           className="h-full w-full object-cover object-center"
                         />

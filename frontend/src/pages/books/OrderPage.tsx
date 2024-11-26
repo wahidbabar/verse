@@ -7,7 +7,7 @@ import {
   FaShoppingBag,
 } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
-import { useGetOrderByEmailQuery } from "../../redux/features/orders/ordersApi";
+import { useGetOrdersByEmail } from "@/api/orders";
 
 const OrderPage = () => {
   const { currentUser } = useAuth();
@@ -37,7 +37,7 @@ const OrderPage = () => {
     data: orders = [],
     isLoading,
     isError,
-  } = useGetOrderByEmailQuery(currentUser.email!);
+  } = useGetOrdersByEmail(currentUser.email!);
 
   if (isLoading)
     return (

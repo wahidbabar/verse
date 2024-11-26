@@ -1,20 +1,17 @@
+import { IBook } from "@/api/types";
+import useCartStore from "@/store/cart-store";
 import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { addToCart } from "../../redux/features/cart/cartSlice";
-import { AppDispatch } from "../../redux/store";
-import { IBook } from "@/redux/features/books/booksApi";
 
 interface BookCardProps {
   book: IBook;
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
-  const dispatch = useDispatch<AppDispatch>();
-
+  const { addToCart } = useCartStore();
   const handleAddToCart = (product: IBook): void => {
-    dispatch(addToCart(product));
+    addToCart(product);
   };
 
   return (

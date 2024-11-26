@@ -3,10 +3,9 @@ import { HiOutlineHeart, HiOutlineShoppingCart } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-import { RootState } from "@/redux/store";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { useAuth } from "../context/AuthContext";
+import useCartStore from "@/store/cart-store";
 
 const navigation = [
   { name: "Dashboard", href: "/user-dashboard" },
@@ -16,8 +15,9 @@ const navigation = [
 ];
 
 const Navbar = () => {
+  const { cartItems } = useCartStore();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
 
   const { currentUser, logout } = useAuth();
 

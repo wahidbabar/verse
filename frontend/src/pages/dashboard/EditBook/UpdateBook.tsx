@@ -2,17 +2,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import Loading from "../../../components/Loading";
-import {
-  UpdateBookRequest,
-  useFetchBookByIdQuery,
-  useUpdateBookMutation,
-} from "../../../redux/features/books/booksApi";
+
 import InputField from "../addBook/InputField";
 import SelectField from "../addBook/SelectField";
+import { useFetchBookById, useUpdateBook } from "@/api/books";
+import { UpdateBookRequest } from "@/api/types";
 
 // Validation Schema
 const bookUpdateSchema = z.object({
@@ -45,13 +43,8 @@ type BookUpdateFormData = z.infer<typeof bookUpdateSchema>;
 
 const UpdateBook: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const {
-    data: bookData,
-    isLoading,
-    isError,
-    refetch,
-  } = useFetchBookByIdQuery(id!);
-  const [updateBook] = useUpdateBookMutation();
+  const { data: book, isLoading, isError, refetch } = useFetchBookById(id!);
+  const updateBook = useUpdateBook();
 
   const {
     register,
@@ -64,23 +57,22 @@ const UpdateBook: React.FC = () => {
   });
 
   useEffect(() => {
-    if (bookData?.book) {
-      setValue("title", bookData.book.title);
-      setValue("description", bookData.book.description);
-      setValue("category", bookData.book.category);
-      setValue("trending", bookData.book.trending ?? false);
-      setValue("oldPrice", bookData.book.oldPrice!);
-      setValue("newPrice", bookData.book.newPrice!);
-      setValue("coverImage", bookData.book.coverImage ?? "");
+    if (book) {
+      setValue("title", book.title);
+      setValue("description", book.description);
+      setValue("category", book.category);
+      setValue("trending", book.trending ?? false);
+      setValue("oldPrice", book.oldPrice!);
+      setValue("newPrice", book.newPrice!);
+      setValue("coverImage", book.coverImage ?? "");
     }
-  }, [bookData, setValue]);
+  }, [book, setValue]);
 
   const onSubmit: SubmitHandler<BookUpdateFormData> = async (data) => {
     if (!id) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Book ID is missing",
+      toast.error("Error", {
+        description: "Book ID is missing",
+        position: "top-right",
       });
       return;
     }
@@ -90,26 +82,24 @@ const UpdateBook: React.FC = () => {
       ...data,
       oldPrice: data.oldPrice,
       newPrice: data.newPrice,
-      coverImage: (data.coverImage || bookData?.book.coverImage) ?? "",
+      coverImage: (data.coverImage || book?.coverImage) ?? "",
       trending: data.trending ?? false,
     };
 
     try {
-      await updateBook(updateBookData).unwrap();
-      Swal.fire({
-        title: "Book Updated",
-        text: "Your book is updated successfully!",
-        icon: "success",
-        confirmButtonText: "OK",
+      updateBook.mutate(updateBookData);
+      toast.success("Book Updated", {
+        description: "Your book is updated successfully!",
+        position: "top-right",
+        duration: 3000,
       });
       reset();
       await refetch();
     } catch (error) {
       console.error("Failed to update book:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Update Failed",
-        text: "Unable to update the book. Please try again.",
+      toast.error("Update Failed", {
+        description: "Unable to update the book. Please try again.",
+        position: "top-right",
       });
     }
   };

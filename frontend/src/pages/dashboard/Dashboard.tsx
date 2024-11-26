@@ -1,52 +1,18 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React from "react";
 import { MdIncompleteCircle } from "react-icons/md";
 import Loading from "../../components/Loading";
-import getBaseUrl from "../../utils/baseURL";
 import RevenueChart from "./RevenueChart";
-
-// Define the type for the API response
-interface DashboardData {
-  totalBooks: number;
-  totalSales: number;
-  trendingBooks: number;
-  totalOrders: number;
-}
+import { useDashboardStats } from "@/api/admin-stats";
 
 const Dashboard: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [data, setData] = useState<DashboardData | null>(null);
+  const { data, isLoading, error } = useDashboardStats();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<DashboardData>(
-          `${getBaseUrl()}/api/admin/stats`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+  if (isLoading) return <Loading />;
 
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) return <Loading />;
-
-  if (!data) {
+  if (error) {
     return (
       <div className="text-center text-red-500">
-        Failed to load dashboard data.
+        Failed to load dashboard data: {error.message}
       </div>
     );
   }
@@ -72,7 +38,7 @@ const Dashboard: React.FC = () => {
             </svg>
           </div>
           <div>
-            <span className="block text-2xl font-bold">{data.totalBooks}</span>
+            <span className="block text-2xl font-bold">{data?.totalBooks}</span>
             <span className="block text-gray-500">Products</span>
           </div>
         </div>
@@ -95,7 +61,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div>
             <span className="block text-2xl font-bold">
-              ${data.totalSales.toFixed(2)}
+              ${data?.totalSales.toFixed(2)}
             </span>
             <span className="block text-gray-500">Total Sales</span>
           </div>
@@ -119,7 +85,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div>
             <span className="inline-block text-2xl font-bold">
-              {data.trendingBooks}
+              {data?.trendingBooks}
             </span>
             <span className="inline-block text-xl text-gray-500 font-semibold">
               (13%)
@@ -134,7 +100,9 @@ const Dashboard: React.FC = () => {
             <MdIncompleteCircle className="size-6" />
           </div>
           <div>
-            <span className="block text-2xl font-bold">{data.totalOrders}</span>
+            <span className="block text-2xl font-bold">
+              {data?.totalOrders}
+            </span>
             <span className="block text-gray-500">Total Orders</span>
           </div>
         </div>

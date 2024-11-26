@@ -1,21 +1,18 @@
+import { useDeleteBook, useFetchBooks } from "@/api/books";
 import React from "react";
 import { BiEdit } from "react-icons/bi";
 import { BsTrash2 } from "react-icons/bs";
 import { FiLoader } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import {
-  useDeleteBookMutation,
-  useFetchAllBooksQuery,
-} from "../../../redux/features/books/booksApi";
 
 const ManageBooks: React.FC = () => {
-  const { data, refetch, isLoading, isError } = useFetchAllBooksQuery();
-  const [deleteBook] = useDeleteBookMutation();
+  const { data: books = [], refetch, isLoading, isError } = useFetchBooks();
+  const deleteBook = useDeleteBook();
 
   // Handle deleting a book with improved error handling
   const handleDeleteBook = async (id: string) => {
     try {
-      await deleteBook(id).unwrap();
+      deleteBook.mutate(id);
 
       // Use a more modern notification method
       alert("Book deleted successfully!");
@@ -49,7 +46,7 @@ const ManageBooks: React.FC = () => {
     );
   }
 
-  if (!data) {
+  if (!books) {
     <div className="h-full flex items-center justify-center">
       <FiLoader className="size-5 animate-spin text-muted-foreground" />
     </div>;
@@ -70,7 +67,7 @@ const ManageBooks: React.FC = () => {
           </Link>
         </div>
 
-        {data?.books.length === 0 ? (
+        {books.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             No books found. Add some books to get started!
           </div>
@@ -92,7 +89,7 @@ const ManageBooks: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {data?.books.map((book, index) => (
+                {books?.map((book, index) => (
                   <tr
                     key={book._id}
                     className="hover:bg-gray-50 transition duration-150 ease-in-out"

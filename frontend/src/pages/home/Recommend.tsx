@@ -5,19 +5,26 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 
 // Import Swiper styles
-import { FiLoader } from "react-icons/fi";
+import { FiAlertTriangle, FiLoader } from "react-icons/fi";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useFetchAllBooksQuery } from "../../redux/features/books/booksApi";
 import BookCard from "../books/BookCard";
+import { useFetchBooks } from "@/api/books";
 
 const Recommend = () => {
-  const { data } = useFetchAllBooksQuery();
+  const { data: books, isLoading } = useFetchBooks();
 
-  if (!data) {
+  if (isLoading) {
     <div className="h-full flex items-center justify-center">
       <FiLoader className="size-5 animate-spin text-muted-foreground" />
+    </div>;
+  }
+
+  if (!books) {
+    <div className="h-full flex flex-1 items-center justify-center flex-col gap-2">
+      <FiAlertTriangle className="size-5 text-muted-foreground" />
+      <span className="text-sm text-muted-foreground">No channel found</span>
     </div>;
   }
 
@@ -49,8 +56,8 @@ const Recommend = () => {
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        {data?.books.length! > 0 &&
-          data?.books.slice(8, 18).map((book, index) => (
+        {books?.length! > 0 &&
+          books?.slice(8, 18).map((book, index) => (
             <SwiperSlide key={index}>
               <BookCard book={book} />
             </SwiperSlide>

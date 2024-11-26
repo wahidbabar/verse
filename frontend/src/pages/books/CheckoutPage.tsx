@@ -1,19 +1,17 @@
 import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { RootState } from "@/redux/store";
+import { toast } from "sonner";
 
-import Swal from "sweetalert2";
-import {
-  CreateOrderRequest,
-  useCreateOrderMutation,
-} from "../../redux/features/orders/ordersApi";
-import { FaShoppingCart, FaCheckCircle } from "react-icons/fa";
+import useCartStore from "@/store/cart-store";
+import { FaCheckCircle, FaShoppingCart } from "react-icons/fa";
+import { CreateOrderRequest } from "@/api/types";
+import { useCreateOrder } from "@/api/orders";
+import { BiLoader } from "react-icons/bi";
 
 const CheckoutPage = () => {
-  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+  const { cartItems } = useCartStore();
   const totalPrice = cartItems
     .reduce((acc, item) => acc + item.newPrice, 0)
     .toFixed(2);
@@ -24,7 +22,7 @@ const CheckoutPage = () => {
     formState: { errors },
   } = useForm<CreateOrderRequest>();
 
-  const [createOrder, { isLoading }] = useCreateOrderMutation();
+  const createOrderMutation = useCreateOrder();
   const navigate = useNavigate();
 
   const [isChecked, setIsChecked] = useState(false);
@@ -46,33 +44,32 @@ const CheckoutPage = () => {
     };
 
     try {
-      await createOrder(newOrder).unwrap();
-      Swal.fire({
-        title: "Order Confirmed",
-        text: "Your order has been placed successfully!",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
-        confirmButtonText: "Continue",
-      }).then(() => {
-        navigate("/orders");
+      createOrderMutation.mutate(newOrder);
+      toast.success("Order Confirmed", {
+        description: "Your order has been placed successfully!",
+        position: "top-right",
+        duration: 3000,
+        onAutoClose: () => navigate("/orders"),
       });
     } catch (error) {
       console.error("Error placing an order", error);
-      Swal.fire({
-        title: "Order Failed",
-        text: "Unable to place your order. Please try again.",
-        icon: "error",
-        confirmButtonColor: "#d33",
+      toast.error("Order Failed", {
+        description: "Unable to place your order. Please try again.",
+        position: "top-right",
+        duration: 3000,
       });
     }
   };
 
-  if (isLoading)
+  if (createOrderMutation.isPending) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500">
+          <BiLoader />
+        </div>
       </div>
     );
+  }
 
   return (
     <section className="bg-gray-100 min-h-screen flex items-center justify-center">
@@ -97,13 +94,11 @@ const CheckoutPage = () => {
           {/* Checkout Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="p-6">
             <div className="grid md:grid-cols-2 gap-6">
-              {/* Personal Details Column */}
               <div>
                 <h3 className="text-xl font-semibold mb-4 text-gray-700">
                   Personal Details
                 </h3>
 
-                {/* Full Name */}
                 <div className="mb-4">
                   <label htmlFor="name" className="block mb-2 text-gray-600">
                     Full Name
@@ -126,7 +121,6 @@ const CheckoutPage = () => {
                   )}
                 </div>
 
-                {/* Email */}
                 <div className="mb-4">
                   <label htmlFor="email" className="block mb-2 text-gray-600">
                     Email Address
@@ -139,7 +133,6 @@ const CheckoutPage = () => {
                   />
                 </div>
 
-                {/* Phone */}
                 <div className="mb-4">
                   <label htmlFor="phone" className="block mb-2 text-gray-600">
                     Phone Number
@@ -163,13 +156,11 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
-              {/* Shipping Details Column */}
               <div>
                 <h3 className="text-xl font-semibold mb-4 text-gray-700">
                   Shipping Address
                 </h3>
 
-                {/* Address */}
                 <div className="mb-4">
                   <label htmlFor="address" className="block mb-2 text-gray-600">
                     Street Address
@@ -189,7 +180,6 @@ const CheckoutPage = () => {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  {/* City */}
                   <div className="mb-4">
                     <label htmlFor="city" className="block mb-2 text-gray-600">
                       City
@@ -208,7 +198,6 @@ const CheckoutPage = () => {
                     )}
                   </div>
 
-                  {/* Country */}
                   <div className="mb-4">
                     <label
                       htmlFor="country"
@@ -232,7 +221,6 @@ const CheckoutPage = () => {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  {/* State */}
                   <div className="mb-4">
                     <label htmlFor="state" className="block mb-2 text-gray-600">
                       State/Province
@@ -251,7 +239,6 @@ const CheckoutPage = () => {
                     )}
                   </div>
 
-                  {/* Zipcode */}
                   <div className="mb-4">
                     <label
                       htmlFor="zipcode"
@@ -280,7 +267,6 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            {/* Terms and Conditions */}
             <div className="mt-6 flex items-center">
               <input
                 type="checkbox"
@@ -304,7 +290,6 @@ const CheckoutPage = () => {
               </label>
             </div>
 
-            {/* Submit Button */}
             <div className="mt-6 text-right">
               <button
                 type="submit"

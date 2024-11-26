@@ -1,20 +1,16 @@
 import { FiShoppingCart } from "react-icons/fi";
-import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  IBook,
-  useFetchBookByIdQuery,
-} from "../../redux/features/books/booksApi";
-import { addToCart } from "../../redux/features/cart/cartSlice";
+import useCartStore from "@/store/cart-store";
+import { IBook } from "@/api/types";
+import { useFetchBookById } from "@/api/books";
 
 const SingleBook = () => {
   const { id } = useParams();
-  const { data: book, isLoading, isError } = useFetchBookByIdQuery(id!);
+  const { data: book, isLoading, isError } = useFetchBookById(id!);
 
-  const dispatch = useDispatch();
-
-  const handleAddToCart = (product: IBook) => {
-    dispatch(addToCart(product));
+  const { addToCart } = useCartStore();
+  const handleAddToCart = (product: IBook): void => {
+    addToCart(product);
   };
 
   if (isLoading)
@@ -38,8 +34,8 @@ const SingleBook = () => {
         <div className="flex justify-center items-center">
           <div className="w-full max-w-md shadow-lg rounded-xl overflow-hidden transform transition-all hover:scale-105">
             <img
-              src={book?.book.coverImage}
-              alt={book?.book.title}
+              src={book?.coverImage}
+              alt={book?.title}
               className="w-full h-auto object-cover"
             />
           </div>
@@ -48,13 +44,13 @@ const SingleBook = () => {
         {/* Book Details Section */}
         <div className="space-y-6">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 leading-tight">
-            {book?.book.title}
+            {book?.title}
           </h1>
 
           <div className="space-y-4 text-gray-700">
             <div className="flex items-center">
               <span className="font-semibold mr-2 text-gray-600">Author:</span>
-              <span className="text-lg">{book?.book.author || "Unknown"}</span>
+              <span className="text-lg">{book?.author || "Unknown"}</span>
             </div>
 
             <div className="flex items-center">
@@ -62,7 +58,7 @@ const SingleBook = () => {
                 Published:
               </span>
               <span className="text-lg">
-                {new Date(book?.book.createdAt!).toLocaleDateString()}
+                {new Date(book?.createdAt!).toLocaleDateString()}
               </span>
             </div>
 
@@ -71,7 +67,7 @@ const SingleBook = () => {
                 Category:
               </span>
               <span className="text-lg capitalize">
-                {book?.book?.category || "Uncategorized"}
+                {book?.category || "Uncategorized"}
               </span>
             </div>
           </div>
@@ -80,13 +76,11 @@ const SingleBook = () => {
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
               Description
             </h2>
-            <p className="text-gray-700 leading-relaxed">
-              {book?.book.description}
-            </p>
+            <p className="text-gray-700 leading-relaxed">{book?.description}</p>
           </div>
 
           <button
-            onClick={() => handleAddToCart(book?.book!)}
+            onClick={() => handleAddToCart(book!)}
             className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 
             bg-blue-600 text-white rounded-lg 
             hover:bg-blue-700 transition-colors duration-300 

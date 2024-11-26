@@ -8,8 +8,8 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useFetchAllBooksQuery } from "../../redux/features/books/booksApi";
 import { FiLoader } from "react-icons/fi";
+import { useFetchBooks } from "@/api/books";
 
 const categories = [
   "Choose a genre",
@@ -30,7 +30,7 @@ const categories = [
 const TopSellers = () => {
   const [selectedCategory, setSelectedCategory] = useState("Choose a genre");
 
-  const { data: books } = useFetchAllBooksQuery();
+  const { data: books } = useFetchBooks();
 
   if (!books) {
     <div className="h-full flex items-center justify-center">
@@ -40,8 +40,8 @@ const TopSellers = () => {
 
   const filteredBooks =
     selectedCategory === "Choose a genre"
-      ? books?.books
-      : books?.books.filter((book) => book.category === selectedCategory);
+      ? books
+      : books?.filter((book) => book.category === selectedCategory);
 
   return (
     <div className="py-10">

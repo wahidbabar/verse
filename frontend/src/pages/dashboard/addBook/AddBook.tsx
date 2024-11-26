@@ -1,15 +1,14 @@
 import React, { useState, ChangeEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import {
-  CreateBookRequest,
-  useAddBookMutation,
-} from "../../../redux/features/books/booksApi";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import InputField from "./InputField";
 import SelectField from "./SelectField";
+import { CreateBookRequest } from "@/api/types";
+import { useAddBook } from "@/api/books";
 
-// Main AddBook Component
 const AddBook: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   // Form hook with type safety
   const {
     register,
@@ -27,7 +26,7 @@ const AddBook: React.FC = () => {
   const [imageFileName, setImageFileName] = useState<string>("");
 
   // Mutation hook
-  const [addBook, { isLoading }] = useAddBookMutation();
+  const addBook = useAddBook();
 
   // File change handler with type safety
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,11 +41,7 @@ const AddBook: React.FC = () => {
   const onSubmit: SubmitHandler<CreateBookRequest> = async (data) => {
     // Validate image upload
     if (!imageFileName) {
-      Swal.fire({
-        title: "Error",
-        text: "Please upload a cover image",
-        icon: "error",
-      });
+      toast.error("Please upload a cover image");
       return;
     }
 
@@ -56,16 +51,16 @@ const AddBook: React.FC = () => {
     };
 
     try {
-      await addBook(newBookData).unwrap();
+      setIsLoading(true);
+      addBook.mutate(newBookData);
 
-      Swal.fire({
-        title: "Book added",
-        text: "Your book is uploaded successfully!",
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, It's Okay!",
+      toast.success("Book Added", {
+        description: "Your book is uploaded successfully!",
+        duration: 5000,
+        action: {
+          label: "Okay",
+          onClick: () => {}, // Optional additional action
+        },
       });
 
       // Reset form and image states
@@ -74,16 +69,15 @@ const AddBook: React.FC = () => {
       setImageFile(null);
     } catch (error) {
       console.error(error);
-      Swal.fire({
-        title: "Error",
-        text: "Failed to add book. Please try again.",
-        icon: "error",
+      toast.error("Failed to Add Book", {
+        description: "Please try again.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Category options
-
   const categoryOptions: { value: string; label: string }[] = [
     { value: "", label: "Choose a genre" },
     { value: "Business", label: "Business" },
