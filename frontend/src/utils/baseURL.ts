@@ -1,5 +1,14 @@
+// src/config/baseUrl.ts
 const getBaseUrl = () => {
-    return "http://localhost:5000"
-}
+  // Check if we're in a production environment
+  const isProduction = import.meta.env.NODE_ENV === "production";
+
+  // Different base URLs for development and production
+  if (isProduction) {
+    return "https://verse-backend-h9kh.onrender.com";
+  } else {
+    return "http://localhost:5000";
+  }
+};
 
 export default getBaseUrl;
