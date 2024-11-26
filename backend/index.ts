@@ -15,7 +15,7 @@ const port: number = parseInt(process.env.PORT || "5000", 10);
 
 // Configure CORS options
 const corsOptions: cors.CorsOptions = {
-  origin: ["http://localhost:5173", "https://book-app-frontend-tau.vercel.app"],
+  origin: ["http://localhost:5173", "https://verse-gray.vercel.app"],
   credentials: true,
 };
 
