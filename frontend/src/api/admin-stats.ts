@@ -3,30 +3,29 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { DashboardData } from "./types";
 
-const fetchDashboardStats = async (): Promise<DashboardData> => {
+// Base axios instance
+const api = axios.create({
+  baseURL: `${getBaseUrl()}/api/admin`,
+  withCredentials: true,
+});
+
+// Interceptor to add token
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-
-  if (!token) {
-    throw new Error("No authentication token found");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+  return config;
+});
 
-  const { data } = await axios.get<DashboardData>(
-    `${getBaseUrl()}/api/admin/stats`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  return data;
-};
-
+// Fetch dashboard stats
 export const useDashboardStats = () => {
-  return useQuery({
+  return useQuery<DashboardData>({
     queryKey: ["dashboardStats"],
-    queryFn: fetchDashboardStats,
+    queryFn: async () => {
+      const { data } = await api.get("/stats");
+      return data;
+    },
     staleTime: 1000 * 60 * 5, // Data considered fresh for 5 minutes
     gcTime: 1000 * 60 * 10, // Cache data for 10 minutes (replaced cacheTime)
     retry: 1, // Retry once on failure

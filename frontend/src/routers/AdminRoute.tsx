@@ -1,3 +1,4 @@
+import { QueryProvider } from "@/providers/query-client";
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -12,7 +13,7 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
     return <Navigate to="/admin" />;
   }
 
-  return children ? <>{children}</> : <Outlet />;
+  return children ? <QueryProvider>{children}</QueryProvider> : <Outlet />;
 };
 
 export default AdminRoute;
