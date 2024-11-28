@@ -31,6 +31,7 @@ const TopSellers = () => {
   const [selectedCategory, setSelectedCategory] = useState("Choose a genre");
   const [books, setBooks] = useState<IBook[] | undefined>(mockBooks);
   const { data, isLoading } = useFetchBooks();
+  // const data = mockBooks;
 
   useEffect(() => {
     if (data) {

@@ -16,14 +16,14 @@ const router = express.Router();
 // put/patch = when edit or update something
 // delete = when delete something
 
-// search books
-router.get("/search", searchBooks);
-
 // post a book
 router.post("/create-book", verifyAdminToken, postABook);
 
 // get all books
 router.get("/", getAllBooks);
+
+// search books
+router.get("/search", searchBooks);
 
 // single book endpoint
 router.get("/:id", getSingleBook);
