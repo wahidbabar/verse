@@ -1,24 +1,28 @@
-// Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// import required modules
 import { Navigation, Pagination } from "swiper/modules";
-
-// Import Swiper styles
-import { FiAlertTriangle, FiLoader } from "react-icons/fi";
+import { FiAlertTriangle } from "react-icons/fi";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import BookCard from "../books/BookCard";
 import { useFetchBooks } from "@/api/books";
+import { useEffect, useState } from "react";
+import { IBook } from "@/api/types";
+import { mockBooks } from "@/utils/mockData";
+import Loading from "@/components/Loading";
 
 const Recommend = () => {
-  const { data: books, isLoading } = useFetchBooks();
+  const [books, setBooks] = useState<IBook[] | undefined>(mockBooks);
+  const { data, isLoading } = useFetchBooks();
+
+  useEffect(() => {
+    if (data) {
+      setBooks(data);
+    }
+  }, [data]);
 
   if (isLoading) {
-    <div className="h-full flex items-center justify-center">
-      <FiLoader className="size-5 animate-spin text-muted-foreground" />
-    </div>;
+    return <Loading />;
   }
 
   if (!books) {

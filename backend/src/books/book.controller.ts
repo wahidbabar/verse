@@ -97,4 +97,77 @@ const deleteABook = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { deleteABook, getAllBooks, getSingleBook, postABook, updateBook };
+const searchBooks = async (req: Request, res: Response) => {
+  try {
+    const {
+      query = "",
+      page = 1,
+      limit = 10,
+      category = "",
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = req.query;
+
+    // Validate and sanitize inputs
+    const pageNumber = Math.max(1, parseInt(page as string, 10) || 1);
+    const limitNumber = Math.min(
+      100,
+      Math.max(1, parseInt(limit as string, 10) || 10)
+    );
+
+    const searchRegex = new RegExp(String(query).trim(), "i");
+
+    const filter: any = {
+      $or: [
+        { title: searchRegex },
+        { author: searchRegex },
+        { description: searchRegex },
+      ],
+    };
+
+    // Add category filter if provided
+    if (category) {
+      filter.category = String(category).trim();
+    }
+
+    // Validate sortBy to prevent injection
+    const validSortFields = ["title", "author", "createdAt", "price"];
+    const safeSortBy = validSortFields.includes(String(sortBy))
+      ? String(sortBy)
+      : "createdAt";
+
+    const options = {
+      skip: (pageNumber - 1) * limitNumber,
+      limit: limitNumber,
+      sort: { [safeSortBy]: sortOrder === "desc" ? -1 : 1 },
+    };
+
+    // Fetch books and count in parallel
+    const [books, total] = await Promise.all([
+      Book.find(filter, null, options),
+      Book.countDocuments(filter),
+    ]);
+
+    res.json({
+      books,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(total / limitNumber),
+      totalBooks: total,
+    });
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({
+      message: "Server error during book search",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};
+
+export {
+  deleteABook,
+  getAllBooks,
+  getSingleBook,
+  postABook,
+  updateBook,
+  searchBooks,
+};

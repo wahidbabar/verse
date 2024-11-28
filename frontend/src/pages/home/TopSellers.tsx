@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookCard from "../books/BookCard";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import { Navigation, Pagination } from "swiper/modules";
-
+import { useFetchBooks } from "@/api/books";
+import { IBook } from "@/api/types";
+import Loading from "@/components/Loading";
+import { mockBooks } from "@/utils/mockData";
+import { FiAlertTriangle } from "react-icons/fi";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { FiLoader } from "react-icons/fi";
-import { useFetchBooks } from "@/api/books";
 
 const categories = [
   "Choose a genre",
@@ -29,12 +29,23 @@ const categories = [
 
 const TopSellers = () => {
   const [selectedCategory, setSelectedCategory] = useState("Choose a genre");
+  const [books, setBooks] = useState<IBook[] | undefined>(mockBooks);
+  const { data, isLoading } = useFetchBooks();
 
-  const { data: books } = useFetchBooks();
+  useEffect(() => {
+    if (data) {
+      setBooks(data);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!books) {
-    <div className="h-full flex items-center justify-center">
-      <FiLoader className="size-5 animate-spin text-muted-foreground" />
+    <div className="h-screen flex flex-1 items-center justify-center flex-col gap-2">
+      <FiAlertTriangle className="size-8 text-muted-foreground" />
+      <span className="text-sm text-muted-foreground">No books found</span>
     </div>;
   }
 

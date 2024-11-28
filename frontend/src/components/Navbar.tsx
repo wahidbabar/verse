@@ -1,122 +1,118 @@
-import { HiOutlineUser } from "react-icons/hi";
-import { HiOutlineHeart, HiOutlineShoppingCart } from "react-icons/hi2";
+import { useState, useRef, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  HiOutlineHeart,
+  HiOutlineShoppingCart,
+  HiOutlineUser,
+} from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import useCartStore from "@/store/cart-store";
-
-const navigation = [
-  { name: "Dashboard", href: "/user-dashboard" },
-  { name: "Orders", href: "/orders" },
-  { name: "Cart Page", href: "/cart" },
-  { name: "Check Out", href: "/checkout" },
-];
+import { IBook } from "@/api/types";
+import { fetchBooks } from "@/api/books";
+import SearchResults from "./SearchResults";
+import { debounce } from "lodash";
 
 const Navbar = () => {
   const { cartItems } = useCartStore();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const queryClient = useQueryClient();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const debouncedSearch = useCallback(
+    debounce((term: string) => {
+      if (term.trim().length > 2) {
+        queryClient.invalidateQueries({ queryKey: ["searchBooks"] });
+      }
+    }, 300),
+    [queryClient]
+  );
 
-  const { currentUser, logout } = useAuth();
-
-  const handleLogOut = () => {
-    logout();
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+    queryClient.cancelQueries({ queryKey: ["searchBooks"] });
+    debouncedSearch(newSearchTerm);
   };
 
-  const token = localStorage.getItem("token");
+  const { data: books, isLoading } = useQuery<IBook[]>({
+    queryKey: ["searchBooks", searchTerm],
+    queryFn: ({ signal }) =>
+      fetchBooks({ queryKey: ["searchBooks", searchTerm], signal }),
+    enabled: searchTerm.trim().length > 2,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const clearSearch = () => {
+    setSearchTerm("");
+    if (searchInputRef.current) {
+      searchInputRef.current.value = "";
+    }
+  };
 
   return (
-    <header className="w-full max-w-screen-4xl mx-auto px-10 py-6">
-      <nav className="flex justify-between items-center space-x-8">
-        {/* Logo and Search bar */}
-        <div className="flex items-center space-x-6">
+    <header className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-10 py-4">
+      <nav className="flex justify-between items-center">
+        {/* Logo and Search */}
+        <div className="flex items-center space-x-4 sm:space-x-6">
+          {/* Logo */}
           <Link
             to="/"
-            className="font-extrabold text-2xl tracking-widest text-primary"
+            className="font-bold text-2xl sm:text-3xl tracking-wider text-primary transition hover:text-primary-dark"
           >
             VERSE
           </Link>
 
-          <div className="sm:w-80 w-52 px-4 py-2 flex items-center bg-gray-200 rounded-md shadow-md">
-            <IoSearchOutline className="text-lg text-gray-600" />
+          {/* Search Bar */}
+          <div className="hidden sm:flex items-center bg-gray-100 rounded-lg shadow-sm w-full max-w-sm px-4 py-2">
+            <IoSearchOutline className="text-lg text-gray-500" />
             <input
+              ref={searchInputRef}
               type="text"
-              placeholder="Search here"
-              className="w-full py-1 px-4 focus:outline-none bg-transparent text-sm text-gray-700 placeholder-gray-400"
+              placeholder="Search here..."
+              onChange={handleSearchChange}
+              className="flex-1 bg-transparent focus:outline-none text-sm text-gray-700 placeholder-gray-400"
             />
+            {searchTerm && (
+              <button
+                onClick={clearSearch}
+                className="ml-2 text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Right section (Profile, Heart, Cart) */}
-        <div className="flex items-center space-x-6">
-          <div className="relative">
-            {currentUser ? (
-              <>
-                <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                  <img
-                    src="/assets/avatar.png"
-                    alt="User Avatar"
-                    className="w-10 h-10 rounded-full ring-2 ring-blue-500"
-                  />
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40">
-                    <ul className="py-2">
-                      {navigation.map((item) => (
-                        <li
-                          key={item.name}
-                          onClick={() => setIsDropdownOpen(false)}
-                        >
-                          <Link
-                            to={item.href}
-                            className="block px-4 py-2 text-sm hover:bg-gray-100 text-gray-700"
-                          >
-                            {item.name}
-                          </Link>
-                        </li>
-                      ))}
-                      <li>
-                        <button
-                          onClick={handleLogOut}
-                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-gray-700"
-                        >
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </>
-            ) : token ? (
-              <Link to="/dashboard" className="text-primary font-semibold">
-                Dashboard
-              </Link>
-            ) : (
-              <Link to="/login" className="text-primary">
-                <HiOutlineUser className="text-xl" />
-              </Link>
-            )}
-          </div>
+        {/* Icons Section */}
+        <div className="flex items-center space-x-4 sm:space-x-6">
+          {/* Profile */}
+          <Link to="/login" className="text-gray-600 hover:text-primary">
+            <HiOutlineUser className="text-2xl" />
+          </Link>
 
-          {/* Heart icon */}
-          <button className="hidden sm:block">
-            <HiOutlineHeart className="text-xl text-gray-600" />
+          {/* Favorites */}
+          <button className="hidden sm:block text-gray-600 hover:text-primary transition">
+            <HiOutlineHeart className="text-2xl" />
           </button>
 
           {/* Cart */}
           <Link
             to="/cart"
-            className="bg-primary text-white py-2 px-4 flex items-center rounded-md hover:bg-primary-dark"
+            className="flex items-center bg-primary text-white rounded-md py-2 px-4 hover:bg-primary-dark transition"
           >
-            <HiOutlineShoppingCart className="text-xl" />
-            <span className="ml-1 text-sm font-semibold">
+            <HiOutlineShoppingCart className="text-2xl" />
+            <span className="ml-1 text-sm font-medium">
               {cartItems.length > 0 ? cartItems.length : 0}
             </span>
           </Link>
         </div>
       </nav>
+
+      {/* Search Results */}
+      {searchTerm && (
+        <SearchResults books={books || []} isLoading={isLoading} />
+      )}
     </header>
   );
 };

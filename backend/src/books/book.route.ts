@@ -5,6 +5,7 @@ import {
   getAllBooks,
   getSingleBook,
   postABook,
+  searchBooks,
   updateBook,
 } from "./book.controller";
 const router = express.Router();
@@ -14,6 +15,9 @@ const router = express.Router();
 // get =  when get something back from db
 // put/patch = when edit or update something
 // delete = when delete something
+
+// search books
+router.get("/search", searchBooks);
 
 // post a book
 router.post("/create-book", verifyAdminToken, postABook);

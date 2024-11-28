@@ -1,5 +1,10 @@
 import getBaseUrl from "@/utils/baseURL";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 import { CreateBookRequest, IBook, UpdateBookRequest } from "./types";
 
@@ -74,4 +79,35 @@ export const useDeleteBook = () => {
       queryClient.invalidateQueries({ queryKey: ["books"] });
     },
   });
+};
+
+export const fetchBooks = async ({
+  queryKey,
+  signal: abortSignal,
+}: {
+  queryKey: QueryKey;
+  signal?: AbortSignal;
+}) => {
+  const [, searchTerm, page = 1] = queryKey;
+
+  if (!searchTerm) return [];
+
+  try {
+    const { data } = await api.get<{ books: IBook[] }>("/search", {
+      params: {
+        query: searchTerm,
+        page,
+        limit: 10,
+      },
+      signal: abortSignal,
+    });
+    return data.books;
+  } catch (error) {
+    // Handle cancellation gracefully
+    if (axios.isCancel(error)) {
+      console.log("Request canceled", error.message);
+      return [];
+    }
+    throw error;
+  }
 };
