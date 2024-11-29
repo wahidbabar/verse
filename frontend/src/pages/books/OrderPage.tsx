@@ -9,6 +9,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { useGetOrdersByEmail } from "@/api/orders";
 import { FiAlertTriangle } from "react-icons/fi";
+import Loading from "@/components/Loading";
 
 const OrderPage = () => {
   const { currentUser } = useAuth();
@@ -40,14 +41,11 @@ const OrderPage = () => {
     isError,
   } = useGetOrdersByEmail(currentUser.email!);
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
-      </div>
-    );
+  console.log(orders, currentUser.email);
 
-  if (isError || !!orders.length) {
+  if (isLoading) return <Loading />;
+
+  if (isError || !orders.length) {
     return (
       <div className="h-screen flex flex-1 items-center justify-center flex-col gap-2">
         <FiAlertTriangle className="size-8 text-muted-foreground" />
