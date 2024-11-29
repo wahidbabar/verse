@@ -41,8 +41,6 @@ const OrderPage = () => {
     isError,
   } = useGetOrdersByEmail(currentUser.email!);
 
-  console.log(orders, currentUser.email);
-
   if (isLoading) return <Loading />;
 
   if (isError || !orders.length) {
