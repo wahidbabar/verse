@@ -47,7 +47,7 @@ const OrderPage = () => {
       </div>
     );
 
-  if (isError) {
+  if (isError || !!orders.length) {
     return (
       <div className="h-screen flex flex-1 items-center justify-center flex-col gap-2">
         <FiAlertTriangle className="size-8 text-muted-foreground" />

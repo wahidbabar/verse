@@ -1,6 +1,8 @@
 import React from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { useGetOrdersByEmail } from "@/api/orders";
+import { FiAlertTriangle } from "react-icons/fi";
+import Loading from "@/components/Loading";
 
 interface Address {
   city: string;
@@ -37,19 +39,24 @@ const UserDashboard: React.FC = () => {
   } = useGetOrdersByEmail(currentUser?.email!) as OrderQueryResponse;
 
   if (isLoading || loadingUser) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (isError || !currentUser) {
-    return <div>Error getting orders data</div>;
+    <div className="h-screen flex flex-1 items-center justify-center flex-col gap-2">
+      <FiAlertTriangle className="size-8 text-muted-foreground" />
+      <span className="text-base text-muted-foreground">
+        No orders found for this user
+      </span>
+    </div>;
   }
 
   return (
-    <div className="bg-gray-100 py-16">
+    <div className="py-16">
       <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4">User Dashboard</h1>
         <p className="text-gray-700 mb-6">
-          Welcome, {currentUser.displayName || "User"}! Here are your recent
+          Welcome, {currentUser?.displayName || "User"}! Here are your recent
           orders:
         </p>
 

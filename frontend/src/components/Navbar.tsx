@@ -1,23 +1,61 @@
-import { useState, useRef, useCallback } from "react";
+import { fetchBooks } from "@/api/books";
+import { IBook } from "@/api/types";
+import { useAuth } from "@/context/AuthContext";
+import useCartStore from "@/store/cart-store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { debounce } from "lodash";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+  HiOutlineCreditCard,
   HiOutlineHeart,
+  HiOutlineLogout,
+  HiOutlineShoppingBag,
   HiOutlineShoppingCart,
   HiOutlineUser,
-} from "react-icons/hi2";
+  HiOutlineViewGrid,
+} from "react-icons/hi";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import useCartStore from "@/store/cart-store";
-import { IBook } from "@/api/types";
-import { fetchBooks } from "@/api/books";
 import SearchResults from "./SearchResults";
-import { debounce } from "lodash";
 
-const Navbar = () => {
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: React.ReactNode;
+}
+
+const navigation: NavigationItem[] = [
+  {
+    name: "Dashboard",
+    href: "/user-dashboard",
+    icon: <HiOutlineViewGrid className="mr-2 text-gray-500" />,
+  },
+  {
+    name: "Orders",
+    href: "/orders",
+    icon: <HiOutlineShoppingBag className="mr-2 text-gray-500" />,
+  },
+  {
+    name: "Cart",
+    href: "/cart",
+    icon: <HiOutlineShoppingCart className="mr-2 text-gray-500" />,
+  },
+  {
+    name: "Checkout",
+    href: "/checkout",
+    icon: <HiOutlineCreditCard className="mr-2 text-gray-500" />,
+  },
+];
+
+const Navbar: React.FC = () => {
   const { cartItems } = useCartStore();
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const queryClient = useQueryClient();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchResultsRef = useRef<HTMLDivElement>(null); // New ref for Search Results
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { currentUser, logout } = useAuth();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const debouncedSearch = useCallback(
     debounce((term: string) => {
@@ -50,39 +88,69 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        searchResultsRef.current &&
+        !searchResultsRef.current.contains(target) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(target)
+      ) {
+        clearSearch();
+      }
+
+      if (dropdownRef.current && !dropdownRef.current.contains(target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogOut = () => {
+    logout();
+    setIsDropdownOpen(false);
+  };
+
   return (
-    <header className="w-full max-w-screen-xl mx-auto px-2 sm:px-6 lg:px-10 py-4">
+    <header className="w-full max-w-screen-xl mx-auto px-2 sm:px-4 py-4">
       <nav className="flex justify-between items-center">
         {/* Logo and Search */}
-        <div className="flex items-center space-x-2 sm:space-x-6 flex-grow mr-2 sm:mr-4">
-          {/* Logo */}
+        <div className="flex items-center space-x-2 sm:space-x-6 flex-grow">
           <Link
             to="/"
-            className="block sm:hidden font-bold text-3xl sm:text-3xl tracking-wider text-primary transition hover:text-primary-dark"
+            className="text-3xl block sm:hidden font-bold text-primary tracking-wide hover:text-primary-dark transition"
           >
             V
           </Link>
           <Link
             to="/"
-            className="hidden sm:block font-bold text-2xl sm:text-3xl tracking-wider text-primary transition hover:text-primary-dark"
+            className="text-2xl hidden sm:block font-bold text-primary tracking-wide hover:text-primary-dark transition"
           >
             VERSE
           </Link>
 
           {/* Search Bar */}
-          <div className="flex items-center bg-gray-100 rounded-lg shadow-sm w-full max-w-none px-4 py-2 relative">
-            <IoSearchOutline className="text-lg text-gray-500" />
+          <div className="relative flex-grow sm:max-w-[900px]">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <IoSearchOutline className="text-gray-400" />
+            </div>
             <input
-              ref={searchInputRef}
               type="text"
-              placeholder="Search here..."
+              ref={searchInputRef}
+              placeholder="Search books..."
+              value={searchTerm}
               onChange={handleSearchChange}
-              className="flex-1 bg-transparent focus:outline-none text-sm text-gray-700 placeholder-gray-400 pr-0"
+              className="w-full pl-10 pr-4 py-2 max-w-[210px] sm:max-w-none border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
             />
             {searchTerm && (
               <button
                 onClick={clearSearch}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 w-4 h-4 flex items-center justify-center"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 ✕
               </button>
@@ -90,13 +158,11 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Icons Section */}
-        <div className="flex items-center space-x-2 sm:space-x-6">
-          {/* Profile */}
-          <Link to="/login" className="text-gray-600 hover:text-primary">
-            <HiOutlineUser className="text-2xl" />
-          </Link>
-
+        {/* Icons and User Section */}
+        <div
+          className="flex items-center space-x-4 relative sm:ml-2.5"
+          ref={dropdownRef}
+        >
           {/* Favorites */}
           <button className="text-gray-600 hover:text-primary transition">
             <HiOutlineHeart className="text-2xl" />
@@ -105,19 +171,89 @@ const Navbar = () => {
           {/* Cart */}
           <Link
             to="/cart"
-            className="flex items-center bg-primary text-white rounded-md py-1 sm:py-2 px-2 sm:px-4 hover:bg-primary-dark transition"
+            className="relative text-gray-600 hover:text-primary transition"
           >
             <HiOutlineShoppingCart className="text-2xl" />
-            <span className="ml-1 text-sm font-medium">
-              {cartItems.length > 0 ? cartItems.length : 0}
-            </span>
+            {cartItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {cartItems.length}
+              </span>
+            )}
           </Link>
+
+          {/* User Dropdown */}
+          <div className="relative">
+            {currentUser ? (
+              <>
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="focus:outline-none"
+                >
+                  <img
+                    src={"/assets/avatar.png"}
+                    alt="User Avatar"
+                    className="size-8 rounded-full ring-2 ring-primary-light"
+                  />
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 z-50">
+                    {/* User Info Header */}
+                    <div className="p-4 border-b border-gray-200">
+                      <div className="flex items-center">
+                        <img
+                          src={"/assets/avatar.png"}
+                          alt="User Avatar"
+                          className="w-12 h-12 rounded-full mr-3"
+                        />
+                        <div>
+                          <p className="font-semibold text-gray-800">
+                            {currentUser?.email}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Navigation Links */}
+                    <div className="py-1">
+                      {navigation.map((item) => (
+                        <Link
+                          key={item.name}
+                          to={item.href}
+                          onClick={() => setIsDropdownOpen(false)}
+                          className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                        >
+                          {item.icon}
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                    {/* Logout */}
+                    <div className="border-t border-gray-200 py-1">
+                      <button
+                        onClick={handleLogOut}
+                        className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition"
+                      >
+                        <HiOutlineLogout className="mr-2 text-red-500" />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <Link to="/login" className="text-gray-600 hover:text-primary">
+                <HiOutlineUser className="text-2xl" />
+              </Link>
+            )}
+          </div>
         </div>
       </nav>
-
       {/* Search Results */}
       {searchTerm && (
-        <SearchResults books={books || []} isLoading={isLoading} />
+        <div ref={searchResultsRef}>
+          <SearchResults books={books || []} isLoading={isLoading} />
+        </div>
       )}
     </header>
   );
