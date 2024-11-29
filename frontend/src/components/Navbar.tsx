@@ -164,9 +164,12 @@ const Navbar: React.FC = () => {
           ref={dropdownRef}
         >
           {/* Favorites */}
-          <button className="text-gray-600 hover:text-primary transition">
+          <Link
+            to="/favorites"
+            className="text-gray-600 hover:text-primary transition"
+          >
             <HiOutlineHeart className="text-2xl" />
-          </button>
+          </Link>
 
           {/* Cart */}
           <Link

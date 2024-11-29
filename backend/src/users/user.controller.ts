@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import User from "./user.model";
+import Book from "../books/book.model";
 
 interface LoginRequest extends Request {
   body: {
@@ -98,5 +99,30 @@ export const registerUser = async (
   } catch (error) {
     console.error("Failed to register user:", error);
     res.status(500).json({ message: "Failed to register user" });
+  }
+};
+
+// get user's favorite books
+export const getUserFavoriteBooks = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      res.status(400).json({ message: "User id is required" });
+      return;
+    }
+
+    const favoriteBooks = await Book.find({ favoritedBy: email });
+
+    res.status(200).json({
+      message: "User's favorite books retrieved",
+      books: favoriteBooks,
+    });
+  } catch (error) {
+    console.error("Error retrieving favorite books:", error);
+    res.status(500).json({ message: "Failed to retrieve favorite books" });
   }
 };

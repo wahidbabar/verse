@@ -6,6 +6,7 @@ import {
   getSingleBook,
   postABook,
   searchBooks,
+  toggleFavoriteBook,
   updateBook,
 } from "./book.controller";
 const router = express.Router();
@@ -33,5 +34,8 @@ router.put("/edit/:id", verifyAdminToken, updateBook);
 
 // delete a book endpoint
 router.delete("/:id", verifyAdminToken, deleteABook);
+
+// Favorite a book
+router.post("/:id/favorite", toggleFavoriteBook);
 
 export default router;

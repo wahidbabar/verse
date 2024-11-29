@@ -12,6 +12,7 @@ import DashboardLayout from "@/pages/dashboard/DashboardLayout";
 import UpdateBook from "@/pages/dashboard/EditBook/UpdateBook";
 import ManageBooks from "@/pages/dashboard/manageBooks/ManageBooks";
 import UserDashboard from "@/pages/dashboard/users/UserDashboard";
+import FavoriteBooks from "@/pages/home/FavoriteBooks";
 import Home from "@/pages/home/Home";
 import AdminRoute from "@/routers/AdminRoute";
 import PrivateRoute from "@/routers/PrivateRoute";
@@ -67,6 +68,14 @@ const routes: RouteObject[] = [
         element: (
           <PrivateRoute>
             <UserDashboard />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/favorites",
+        element: (
+          <PrivateRoute>
+            <FavoriteBooks />
           </PrivateRoute>
         ),
       },

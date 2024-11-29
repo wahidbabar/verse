@@ -163,6 +163,56 @@ const searchBooks = async (req: Request, res: Response) => {
   }
 };
 
+// Toggle Favorite a book
+const toggleFavoriteBook = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params; // Book ID
+    const { email } = req.body; // User email
+
+    if (!email) {
+      res.status(400).json({ message: "User email is required" });
+      return;
+    }
+
+    // Find the book by ID
+    const book = await Book.findById(id);
+    if (!book) {
+      res.status(404).json({ message: "Book not found!" });
+      return;
+    }
+
+    // Ensure favoritedBy array exists
+    if (!book.favoritedBy) book.favoritedBy = [];
+
+    // Check if the book is already favorited by the user
+    if (book.favoritedBy.includes(email)) {
+      // If already favorited, remove the email to unfavorite
+      book.favoritedBy = book.favoritedBy.filter(
+        (userEmail) => userEmail !== email
+      );
+      await book.save();
+      res.status(200).json({
+        message: "Book unfavorited successfully",
+        book,
+      });
+    } else {
+      // If not favorited, add the email to favorite
+      book.favoritedBy.push(email);
+      await book.save();
+      res.status(200).json({
+        message: "Book favorited successfully",
+        book,
+      });
+    }
+  } catch (error) {
+    console.error("Error toggling favorite status:", error);
+    res.status(500).json({ message: "Failed to toggle favorite status" });
+  }
+};
+
 export {
   deleteABook,
   getAllBooks,
@@ -170,4 +220,5 @@ export {
   postABook,
   updateBook,
   searchBooks,
+  toggleFavoriteBook,
 };

@@ -10,8 +10,9 @@ export interface IBook extends Document {
   coverImage: string;
   oldPrice: number;
   newPrice: number;
+  favoritedBy?: string[]; // Optional field for favorite users
   createdAt?: Date;
-  updatedAt?: Date; // This is included because of `timestamps: true`
+  updatedAt?: Date;
 }
 
 // Define the schema for the Book model
@@ -52,6 +53,10 @@ const bookSchema: Schema<IBook> = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now,
+    },
+    favoritedBy: {
+      type: [String],
+      default: [],
     },
   },
   {

@@ -111,3 +111,17 @@ export const fetchBooks = async ({
     throw error;
   }
 };
+
+export const useToggleFavoriteBook = (email: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => api.post(`/${id}/favorite`, { email }),
+    onSuccess: (_, id) => {
+      // Invalidate queries related to books and favorites to reflect updates
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+      queryClient.invalidateQueries({ queryKey: ["book", id] });
+    },
+  });
+};
