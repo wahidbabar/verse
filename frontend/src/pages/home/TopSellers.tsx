@@ -10,6 +10,7 @@ import { FiAlertTriangle } from "react-icons/fi";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { BiChevronDown } from "react-icons/bi";
 
 const categories = [
   "Choose a genre",
@@ -39,7 +40,7 @@ const TopSellers = () => {
     }
   }, [data]);
 
-  if (isLoading) {
+  if (!books && isLoading) {
     return <Loading />;
   }
 
@@ -59,19 +60,49 @@ const TopSellers = () => {
     <div className="py-10">
       <h2 className="text-3xl font-semibold mb-6">Top Sellers</h2>
       {/* category filtering */}
-      <div className="mb-8 flex items-center">
-        <select
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          name="category"
-          id="category"
-          className="border bg-[#EAEAEA] border-gray-300 rounded-md px-4 py-2 focus:outline-none"
-        >
-          {categories.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+      <div className="relative w-full max-w-xs mb-8">
+        <div className="relative">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            name="category"
+            id="category"
+            className="
+            appearance-none 
+            w-full 
+            bg-white 
+            border-2 
+            border-blue-300 
+            rounded-lg 
+            pl-4 
+            pr-10 
+            py-3 
+            text-gray-700 
+            font-medium 
+            shadow-sm 
+            transition-all 
+            duration-300 
+            hover:border-blue-500 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-blue-300 
+            focus:border-transparent 
+            cursor-pointer"
+          >
+            {categories.map((category, index) => (
+              <option
+                key={index}
+                value={category}
+                className="bg-white hover:bg-blue-50"
+              >
+                {category}
+              </option>
+            ))}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+            <BiChevronDown size={20} className="text-blue-500" />
+          </div>
+        </div>
       </div>
 
       <Swiper
@@ -99,12 +130,17 @@ const TopSellers = () => {
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        {filteredBooks?.length! > 0 &&
+        {filteredBooks?.length! > 0 ? (
           filteredBooks?.map((book, index) => (
             <SwiperSlide key={index}>
               <BookCard book={book} />
             </SwiperSlide>
-          ))}
+          ))
+        ) : (
+          <p>
+            Sorry, no books in the category: <strong>{selectedCategory}</strong>
+          </p>
+        )}
       </Swiper>
     </div>
   );

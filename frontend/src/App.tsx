@@ -30,7 +30,7 @@ const App: FC = () => {
           <Toaster />
           <div className="min-h-screen flex flex-col">
             <Navbar />
-            <main className="flex-grow px-10">
+            <main className="flex-grow px-4 sm:px-10">
               <Outlet />
             </main>
             <Footer />

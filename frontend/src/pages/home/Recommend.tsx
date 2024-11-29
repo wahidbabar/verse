@@ -21,7 +21,7 @@ const Recommend = () => {
     }
   }, [data]);
 
-  if (isLoading) {
+  if (!books && isLoading) {
     return <Loading />;
   }
 

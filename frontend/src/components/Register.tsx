@@ -78,10 +78,10 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-white shadow-xl rounded-xl p-6 sm:p-10">
+    <div className="flex items-center justify-center px-1 sm:px-6 lg:px-8 m-4">
+      <div className="w-full max-w-md space-y-2 sm:space-y-8 bg-white shadow-xl rounded-xl p-6 sm:p-10">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
             Create Your Account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
@@ -89,7 +89,7 @@ const Register: React.FC = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="rounded-md shadow-sm space-y-4">
             <div className="mb-4">
               <label
@@ -206,7 +206,7 @@ const Register: React.FC = () => {
           </div>
         </form>
 
-        <div className="mt-6">
+        <div className="mt-2 sm:mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
@@ -218,7 +218,7 @@ const Register: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-2 sm:mt-6">
             <button
               onClick={handleGoogleSignIn}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
@@ -229,7 +229,7 @@ const Register: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-6 text-center">
+        <div className="mt-2 sm:mt-6 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
             <Link
@@ -241,7 +241,7 @@ const Register: React.FC = () => {
           </p>
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-2 sm:mt-8 text-center">
           <p className="text-xs text-gray-500">
             © {new Date().getFullYear()} Book Store. All rights reserved.
           </p>
