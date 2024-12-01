@@ -17,6 +17,7 @@ import {
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import SearchResults from "./SearchResults";
+import { useUserFavoriteBooks } from "@/api/users";
 
 interface NavigationItem {
   name: string;
@@ -56,6 +57,8 @@ const Navbar: React.FC = () => {
   const { currentUser, logout } = useAuth();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const { data: favorites } = useUserFavoriteBooks(currentUser?.email!);
 
   const debouncedSearch = useCallback(
     debounce((term: string) => {
@@ -119,7 +122,6 @@ const Navbar: React.FC = () => {
   return (
     <header className="w-full max-w-screen-xl mx-auto px-2 sm:px-4 py-4">
       <nav className="flex justify-between items-center">
-        {/* Logo and Search */}
         <div className="flex items-center space-x-2 sm:space-x-6 flex-grow">
           <Link
             to="/"
@@ -134,7 +136,6 @@ const Navbar: React.FC = () => {
             VERSE
           </Link>
 
-          {/* Search Bar */}
           <div className="relative flex-grow sm:max-w-[900px]">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <IoSearchOutline className="text-gray-400" />
@@ -158,33 +159,34 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Icons and User Section */}
         <div
           className="flex items-center space-x-4 relative sm:ml-2.5"
           ref={dropdownRef}
         >
-          {/* Favorites */}
           <Link
             to="/favorites"
-            className="text-gray-600 hover:text-primary transition"
+            className="relative text-gray-600 hover:text-primary transition"
           >
             <HiOutlineHeart className="text-2xl" />
+            {favorites && favorites.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full size-4 flex items-center justify-center">
+                {favorites.length}
+              </span>
+            )}
           </Link>
 
-          {/* Cart */}
           <Link
             to="/cart"
             className="relative text-gray-600 hover:text-primary transition"
           >
             <HiOutlineShoppingCart className="text-2xl" />
             {cartItems.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full size-5 flex items-center justify-center">
                 {cartItems.length}
               </span>
             )}
           </Link>
 
-          {/* User Dropdown */}
           <div className="relative">
             {currentUser ? (
               <>
@@ -201,7 +203,6 @@ const Navbar: React.FC = () => {
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 z-50">
-                    {/* User Info Header */}
                     <div className="p-4 border-b border-gray-200">
                       <div className="flex items-center">
                         <img
@@ -217,7 +218,6 @@ const Navbar: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Navigation Links */}
                     <div className="py-1">
                       {navigation.map((item) => (
                         <Link
@@ -231,7 +231,6 @@ const Navbar: React.FC = () => {
                         </Link>
                       ))}
                     </div>
-                    {/* Logout */}
                     <div className="border-t border-gray-200 py-1">
                       <button
                         onClick={handleLogOut}
@@ -252,7 +251,6 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </nav>
-      {/* Search Results */}
       {searchTerm && (
         <div ref={searchResultsRef}>
           <SearchResults books={books || []} isLoading={isLoading} />

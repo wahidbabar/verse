@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,8 +10,32 @@ interface LoginFormInputs {
   password: string;
 }
 
+const Spinner: React.FC = () => (
+  <svg
+    className="animate-spin h-5 w-5 text-white"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <circle
+      className="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="4"
+    ></circle>
+    <path
+      className="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8v8H4z"
+    ></path>
+  </svg>
+);
+
 const Login: React.FC = () => {
   const { loginUser, signInWithGoogle } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -22,7 +46,9 @@ const Login: React.FC = () => {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
+      setIsLoading(true);
       await loginUser(data.email, data.password);
+      setIsLoading(false);
       toast.success("Login Successful", {
         description: "Welcome back to Book Store!",
         position: "top-right",
@@ -30,6 +56,7 @@ const Login: React.FC = () => {
       });
       navigate("/", { replace: true });
     } catch (error) {
+      setIsLoading(false);
       const errorMessage = "Invalid email or password. Please try again.";
       toast.error("Login Error", {
         description: errorMessage,
@@ -42,7 +69,9 @@ const Login: React.FC = () => {
 
   const handleGoogleSignIn = async () => {
     try {
+      setIsLoading(true);
       await signInWithGoogle();
+      setIsLoading(false);
       toast.success("Google Sign-in Successful", {
         description: "Welcome to Book Store!",
         position: "top-right",
@@ -50,6 +79,7 @@ const Login: React.FC = () => {
       });
       navigate("/", { replace: true });
     } catch (error) {
+      setIsLoading(true);
       const errorMessage = "Google sign-in failed. Please try again.";
       toast.error("Google Sign-in Error", {
         description: errorMessage,
@@ -90,6 +120,7 @@ const Login: React.FC = () => {
                 type="email"
                 id="email"
                 placeholder="you@example.com"
+                disabled={isLoading}
                 className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 
                   ${errors.email ? "border-red-500" : "border-gray-300"}
                 `}
@@ -119,6 +150,7 @@ const Login: React.FC = () => {
                 type="password"
                 id="password"
                 placeholder="Enter your password"
+                disabled={isLoading}
                 className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 
                   ${errors.password ? "border-red-500" : "border-gray-300"}
                 `}
@@ -134,9 +166,15 @@ const Login: React.FC = () => {
           <div>
             <button
               type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isLoading}
+              className={`w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 
+              ${
+                isLoading
+                  ? "bg-indigo-400 cursor-not-allowed"
+                  : "bg-indigo-600 hover:bg-indigo-700"
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             >
-              Sign in
+              {isLoading ? <Spinner /> : "Sign in"}
             </button>
           </div>
         </form>
@@ -156,10 +194,22 @@ const Login: React.FC = () => {
           <div className="mt-6">
             <button
               onClick={handleGoogleSignIn}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              disabled={isLoading}
+              className={`w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 
+              ${
+                isLoading
+                  ? "bg-red-400 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700"
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500`}
             >
-              <FaGoogle className="mr-2 h-5 w-5" />
-              Sign in with Google
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <>
+                  <FaGoogle className="mr-2 h-5 w-5" />
+                  Sign in with Google
+                </>
+              )}
             </button>
           </div>
         </div>
