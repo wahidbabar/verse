@@ -170,9 +170,9 @@ const toggleFavoriteBook = async (
 ): Promise<void> => {
   try {
     const { id } = req.params; // Book ID
-    const { email } = req.body; // User email
+    const { userId } = req.body; // User email
 
-    if (!email) {
+    if (!userId) {
       res.status(400).json({ message: "User email is required" });
       return;
     }
@@ -188,10 +188,10 @@ const toggleFavoriteBook = async (
     if (!book.favoritedBy) book.favoritedBy = [];
 
     // Check if the book is already favorited by the user
-    if (book.favoritedBy.includes(email)) {
+    if (book.favoritedBy.includes(userId)) {
       // If already favorited, remove the email to unfavorite
       book.favoritedBy = book.favoritedBy.filter(
-        (userEmail) => userEmail !== email
+        (userEmail) => userEmail !== userId
       );
       await book.save();
       res.status(200).json({
@@ -200,7 +200,7 @@ const toggleFavoriteBook = async (
       });
     } else {
       // If not favorited, add the email to favorite
-      book.favoritedBy.push(email);
+      book.favoritedBy.push(userId);
       await book.save();
       res.status(200).json({
         message: "Book favorited successfully",

@@ -1,8 +1,9 @@
+import Loading from "@/components/Loading";
+import useCartStore from "@/store/cart-store";
+import { getAuth, onIdTokenChanged } from "firebase/auth";
 import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import Loading from "@/components/Loading";
-import { getAuth, onIdTokenChanged } from "firebase/auth";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface PrivateRouteProps {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const { currentUser, loading, logout } = useAuth();
+  const { setUserId } = useCartStore();
   const auth = getAuth();
 
   useEffect(() => {
@@ -18,6 +20,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
       if (!user) {
         // User is logged out
         localStorage.removeItem("token");
+        setUserId(null);
         logout();
       }
     });

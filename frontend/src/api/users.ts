@@ -2,10 +2,11 @@ import getBaseUrl from "@/utils/baseURL";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IBook } from "./types";
+import { isTokenValid } from "@/lib/utils";
 
 // Base axios instance
 const api = axios.create({
-  baseURL: `${getBaseUrl()}/api/auth`,
+  baseURL: `${getBaseUrl()}/api/users`,
   withCredentials: true,
 });
 
@@ -18,13 +19,12 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export const useUserFavoriteBooks = (email: string) => {
+export const useUserFavoriteBooks = (userId: string) => {
+  const validToken = isTokenValid();
   return useQuery<IBook[]>({
-    queryKey: ["favorites", email], // Include email in the queryKey
+    queryKey: ["favorites", userId],
     queryFn: () =>
-      api
-        .post("/favorites", { email }) // Pass email in the body
-        .then((res) => res.data.books),
-    enabled: !!email, // Ensure the query runs only if email is provided
+      api.get(`/favorites/${userId}`).then((res) => res.data.books),
+    enabled: validToken,
   });
 };

@@ -29,7 +29,7 @@ app.use(cors(corsOptions));
 // Routes
 app.use("/api/books", bookRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api/auth", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 
 // Database connection

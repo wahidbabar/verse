@@ -1,6 +1,8 @@
 import { fetchBooks } from "@/api/books";
 import { IBook } from "@/api/types";
+import { useUserFavoriteBooks } from "@/api/users";
 import { useAuth } from "@/context/AuthContext";
+import { isTokenValid } from "@/lib/utils";
 import useCartStore from "@/store/cart-store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { debounce } from "lodash";
@@ -17,7 +19,6 @@ import {
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import SearchResults from "./SearchResults";
-import { useUserFavoriteBooks } from "@/api/users";
 
 interface NavigationItem {
   name: string;
@@ -49,7 +50,7 @@ const navigation: NavigationItem[] = [
 ];
 
 const Navbar: React.FC = () => {
-  const { cartItems } = useCartStore();
+  const { cartItems, userId, clearCart, setUserId } = useCartStore();
   const queryClient = useQueryClient();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
@@ -57,8 +58,9 @@ const Navbar: React.FC = () => {
   const { currentUser, logout } = useAuth();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const validToken = isTokenValid();
 
-  const { data: favorites } = useUserFavoriteBooks(currentUser?.email!);
+  const { data: favorites } = useUserFavoriteBooks(userId!);
 
   const debouncedSearch = useCallback(
     debounce((term: string) => {
@@ -116,9 +118,13 @@ const Navbar: React.FC = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
+    setUserId(null);
+    clearCart();
     logout();
     setIsDropdownOpen(false);
   };
+
+  console.log(validToken);
 
   return (
     <header className="w-full max-w-screen-xl mx-auto px-2 sm:px-4 py-4">
@@ -189,7 +195,7 @@ const Navbar: React.FC = () => {
           </Link>
 
           <div className="relative">
-            {currentUser ? (
+            {validToken ? (
               <>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}

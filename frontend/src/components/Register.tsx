@@ -43,10 +43,14 @@ const Register: React.FC = () => {
         state: { message: "Registration successful! Please log in." },
       });
     } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Registration failed. Please try again.";
+      let errorMessage = "Registration failed. Please try again.";
+
+      // Check for specific "user already exists" error
+      if (error instanceof Error && error.message.includes("already-in-use")) {
+        errorMessage =
+          "This email is already registered. Please use a different email or log in.";
+      }
+
       toast.error("Registration Error", {
         description: errorMessage,
         position: "top-right",

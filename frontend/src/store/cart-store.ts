@@ -4,7 +4,9 @@ import { toast } from "sonner";
 import { IBook } from "../api/types";
 
 interface CartState {
+  userId: string | null;
   cartItems: IBook[];
+  setUserId: (userId: string | null) => void;
   addToCart: (book: IBook) => void;
   removeFromCart: (book: IBook) => void;
   clearCart: () => void;
@@ -13,7 +15,14 @@ interface CartState {
 const useCartStore = create<CartState>()(
   persist(
     (set) => ({
+      userId: null,
       cartItems: [],
+
+      setUserId: (newUserId) => {
+        set({
+          userId: newUserId,
+        });
+      },
 
       addToCart: (book) =>
         set((state) => {
@@ -50,8 +59,16 @@ const useCartStore = create<CartState>()(
       clearCart: () => set({ cartItems: [] }),
     }),
     {
-      name: "cart-storage", // unique name
-      storage: createJSONStorage(() => localStorage), // correct way to specify localStorage
+      name: "cart-storage",
+      storage: createJSONStorage(() => localStorage),
+      merge: (persistedState, currentState) => {
+        const typedPersistedState = persistedState as CartState;
+        return {
+          ...currentState,
+          userId: typedPersistedState.userId || currentState.userId,
+          cartItems: typedPersistedState.cartItems || currentState.cartItems,
+        };
+      },
     }
   )
 );

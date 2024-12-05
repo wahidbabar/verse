@@ -108,14 +108,14 @@ export const getUserFavoriteBooks = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { email } = req.body;
+    const { userId } = req.params;
 
-    if (!email) {
-      res.status(400).json({ message: "User id is required" });
+    if (!userId) {
+      res.status(400).json({ message: "Email is required" });
       return;
     }
 
-    const favoriteBooks = await Book.find({ favoritedBy: email });
+    const favoriteBooks = await Book.find({ favoritedBy: userId });
 
     res.status(200).json({
       message: "User's favorite books retrieved",

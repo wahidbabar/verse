@@ -4,6 +4,7 @@ import {
   loginAdmin,
   registerUser,
 } from "./user.controller";
+import verifyAuthToken from "../middleware/verifyAuthToken";
 
 const router: Router = express.Router();
 
@@ -14,6 +15,6 @@ router.post("/admin", loginAdmin);
 router.post("/register", registerUser);
 
 // Get user's favorite books
-router.post("/favorites", getUserFavoriteBooks);
+router.get("/favorites/:userId", verifyAuthToken, getUserFavoriteBooks);
 
 export default router;

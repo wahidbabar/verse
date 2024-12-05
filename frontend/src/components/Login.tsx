@@ -1,3 +1,4 @@
+import useCartStore from "@/store/cart-store";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
@@ -50,6 +51,7 @@ const Login: React.FC = () => {
       const res = await loginUser(data.email, data.password);
       if (res) {
         const token = await res.user.getIdToken();
+        useCartStore.getState().setUserId(res.user.uid);
         localStorage.setItem("token", token);
       }
       setIsLoading(false);

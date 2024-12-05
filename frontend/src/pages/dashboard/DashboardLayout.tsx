@@ -1,12 +1,16 @@
+import useCartStore from "@/store/cart-store";
 import { HiViewGridAdd } from "react-icons/hi";
 import { MdOutlineManageHistory } from "react-icons/md";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
+  const { clearCart, setUserId } = useCartStore();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setUserId(null);
+    clearCart();
     navigate("/");
   };
 

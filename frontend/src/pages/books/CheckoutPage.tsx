@@ -74,6 +74,8 @@ const CheckoutPage = () => {
             phone: data.phone,
           });
 
+        clearCart();
+
         // Redirect to Stripe Checkout
         window.location.href = checkoutData.url;
       } else if (paymentMethod === "COD") {

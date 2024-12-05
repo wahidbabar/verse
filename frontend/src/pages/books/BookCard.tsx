@@ -1,37 +1,19 @@
-import { useToggleFavoriteBook } from "@/api/books";
 import { IBook } from "@/api/types";
-import { useAuth } from "@/context/AuthContext";
 import useCartStore from "@/store/cart-store";
-import React, { useState } from "react";
-import { BsHeart, BsHeartFill } from "react-icons/bs";
+import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import FavoriteBookButton from "./FavoriteBookButton";
 
 interface BookCardProps {
   book: IBook;
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
-  const { addToCart } = useCartStore();
-  const { currentUser } = useAuth();
-  const toggleFavoriteBook = useToggleFavoriteBook(currentUser?.email!);
-
-  const [isFavorite, setIsFavorite] = useState(
-    book.favoritedBy?.includes(currentUser?.email!) || false
-  );
+  const { addToCart, userId } = useCartStore();
 
   const handleAddToCart = (product: IBook): void => {
     addToCart(product);
-  };
-
-  const handleToggleFavorite = (bookId: string): void => {
-    setIsFavorite(!isFavorite);
-
-    toggleFavoriteBook.mutate(bookId, {
-      onError: () => {
-        setIsFavorite((prev) => !prev);
-      },
-    });
   };
 
   return (
@@ -76,24 +58,13 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
               <span>Add to Cart</span>
             </button>
 
-            {currentUser &&
-              (isFavorite ? (
-                <button
-                  onClick={() => handleToggleFavorite(book._id)}
-                  className="text-red-500 hover:bg-red-50 p-2 rounded-md transition"
-                  disabled={toggleFavoriteBook.isPending}
-                >
-                  <BsHeartFill className="h-6 w-6" />
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleToggleFavorite(book._id)}
-                  className="text-green-500 hover:bg-green-50 p-2 rounded-md transition"
-                  disabled={toggleFavoriteBook.isPending}
-                >
-                  <BsHeart className="h-6 w-6" />
-                </button>
-              ))}
+            {userId && book.favoritedBy && (
+              <FavoriteBookButton
+                userId={userId}
+                bookId={book._id}
+                favoritedBy={book.favoritedBy!}
+              />
+            )}
           </div>
         </div>
       </div>

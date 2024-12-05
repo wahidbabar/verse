@@ -1,24 +1,22 @@
-import React from "react";
 import { useToggleFavoriteBook } from "@/api/books";
 import { useUserFavoriteBooks } from "@/api/users";
 import Loading from "@/components/Loading";
-import { useAuth } from "@/context/AuthContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FaHeart, FaBook } from "react-icons/fa";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import useCartStore from "@/store/cart-store";
+import React from "react";
+import { FaBook, FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const FavoriteBooks: React.FC = () => {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { userId } = useCartStore();
 
-  const { data: favorites, isLoading } = useUserFavoriteBooks(
-    currentUser?.email!
-  );
-  const toggleFavoriteBook = useToggleFavoriteBook(currentUser?.email!);
+  const { data: favorites, isLoading } = useUserFavoriteBooks(userId!);
+  const toggleFavoriteBook = useToggleFavoriteBook(userId!);
 
-  if (isLoading || !currentUser) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="container mx-auto px-4 py-8">

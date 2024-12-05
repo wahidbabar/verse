@@ -5,7 +5,7 @@ export interface IBook {
   description: string;
   category: string;
   trending?: boolean;
-  favoritedBy?: string[];
+  favoritedBy: string[];
   coverImage: string;
   oldPrice?: number;
   newPrice: number;
