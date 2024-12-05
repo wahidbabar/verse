@@ -18,10 +18,6 @@ const FavoriteBookButton: React.FC<FavoriteBookButtonProps> = ({
   );
   const toggleFavoriteBook = useToggleFavoriteBook(userId);
 
-  if (bookId === "673a0832909a8290b2fa1b7d") {
-    console.log(favoritedBy, userId, isFavorite);
-  }
-
   const handleToggleFavorite = (): void => {
     setIsFavorite(!isFavorite);
 
