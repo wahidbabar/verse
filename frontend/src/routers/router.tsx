@@ -5,6 +5,7 @@ import Register from "@/components/Register";
 import CartPage from "@/pages/books/CartPage";
 import CheckoutPage from "@/pages/books/CheckoutPage";
 import OrderPage from "@/pages/books/OrderPage";
+import OrderSuccess from "@/pages/books/OrderSuccess";
 import SingleBook from "@/pages/books/SingleBook";
 import AddBook from "@/pages/dashboard/addBook/AddBook";
 import Dashboard from "@/pages/dashboard/Dashboard";
@@ -56,6 +57,14 @@ const routes: RouteObject[] = [
         element: (
           <PrivateRoute>
             <CheckoutPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/order-success",
+        element: (
+          <PrivateRoute>
+            <OrderSuccess />
           </PrivateRoute>
         ),
       },

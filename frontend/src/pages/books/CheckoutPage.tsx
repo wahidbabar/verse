@@ -88,7 +88,7 @@ const CheckoutPage = () => {
           duration: 3000,
           onAutoClose: () => {
             clearCart();
-            navigate("/orders");
+            navigate("/order-success");
           },
         });
       }
@@ -208,7 +208,7 @@ const CheckoutPage = () => {
                     {...register("phone", {
                       required: "Phone number is required",
                       pattern: {
-                        value: /^[0-9]{10}$/,
+                        value: /^[0-9]{11}$/,
                         message: "Please enter a valid 10-digit phone number",
                       },
                     })}

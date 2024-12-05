@@ -1,10 +1,16 @@
+import React from "react";
 import { useToggleFavoriteBook } from "@/api/books";
 import { useUserFavoriteBooks } from "@/api/users";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/context/AuthContext";
-import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FaHeart, FaBook } from "react-icons/fa";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useNavigate } from "react-router-dom";
 
 const FavoriteBooks: React.FC = () => {
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
 
   const { data: favorites, isLoading } = useUserFavoriteBooks(
@@ -15,45 +21,54 @@ const FavoriteBooks: React.FC = () => {
   if (isLoading || !currentUser) return <Loading />;
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Your Favorite Books
-        </h1>
-
-        {favorites?.length === 0 ? (
-          <p className="text-center text-gray-500">
-            No favorite books yet. Start exploring!
-          </p>
-        ) : (
-          <ul className="space-y-4">
-            {favorites?.map((book) => (
-              <li
-                key={book._id}
-                className="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg border shadow-sm transition-transform transform hover:scale-105"
-              >
-                <div className="flex flex-col sm:flex-row items-center sm:space-x-4">
-                  <div className="text-center sm:text-left">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {book.title}
-                    </h3>
-                    <p className="text-gray-600">by {book.author}</p>
-                  </div>
-                </div>
-                <div className="flex space-x-2 mt-4 sm:mt-0">
-                  <button
-                    onClick={() => toggleFavoriteBook.mutate(book._id)}
-                    disabled={toggleFavoriteBook.isPending}
-                    className="flex items-center justify-center px-4 py-2 text-sm font-medium text-red-500 bg-red-100 hover:bg-red-200 rounded-lg transition disabled:opacity-50"
+    <div className="container mx-auto px-4 py-8">
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader className="flex flex-row items-center space-x-4 border-b">
+          <FaHeart className="text-3xl text-red-500" />
+          <CardTitle className="text-2xl md:text-3xl">
+            Your Favorite Books
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          {favorites?.length === 0 ? (
+            <div className="p-8 text-center">
+              <FaBook className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+              <p className="text-xl text-gray-500 mb-4">
+                No favorite books yet
+              </p>
+              <Button variant="outline" onClick={() => navigate("/")}>
+                Explore Books
+              </Button>
+            </div>
+          ) : (
+            <ScrollArea className="h-[600px] w-full">
+              <div className="p-4 space-y-4">
+                {favorites?.map((book) => (
+                  <div
+                    key={book._id}
+                    className="bg-white border rounded-lg p-4 flex justify-between items-center hover:bg-gray-50 transition"
                   >
-                    Unfavorite
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {book.title}
+                      </h3>
+                      <p className="text-gray-600">by {book.author}</p>
+                    </div>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => toggleFavoriteBook.mutate(book._id)}
+                      disabled={toggleFavoriteBook.isPending}
+                    >
+                      <FaHeart className="mr-2" /> Unfavorite
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
