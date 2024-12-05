@@ -7,9 +7,9 @@ import {
   FaShoppingBag,
 } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
-import { useGetOrdersByEmail } from "@/api/orders";
 import { FiAlertTriangle } from "react-icons/fi";
 import Loading from "@/components/Loading";
+import { useGetOrdersByUserId } from "@/api/orders";
 
 const OrderPage = () => {
   const { currentUser } = useAuth();
@@ -39,7 +39,7 @@ const OrderPage = () => {
     data: orders = [],
     isLoading,
     isError,
-  } = useGetOrdersByEmail(currentUser.email!);
+  } = useGetOrdersByUserId(currentUser.uid!);
 
   if (isLoading) return <Loading />;
 

@@ -1,12 +1,26 @@
 import express from "express";
-const { createAOrder, getOrderByEmail } = require("./order.controller");
+import {
+  getOrdersByUserId,
+  getOrderById,
+  createCheckoutSession,
+  handleWebhook,
+  createCashOnDeliveryOrder,
+} from "./order.controller";
+import verifyAuthToken from "../middleware/verifyAuthToken";
 
 const router = express.Router();
 
-// create order endpoint
-router.post("/", createAOrder);
+// Public webhook route (no authentication)
+router.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  handleWebhook
+);
 
-// get orders by user email
-router.get("/email/:email", getOrderByEmail);
+// All other routes require authentication
+router.post("/cod", verifyAuthToken, createCashOnDeliveryOrder);
+router.get("/user/:userId", verifyAuthToken, getOrdersByUserId);
+router.get("/:id", verifyAuthToken, getOrderById);
+router.post("/create-checkout-session", verifyAuthToken, createCheckoutSession);
 
 export default router;

@@ -1,6 +1,5 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 
-// Define an interface for the Book document
 export interface IBook extends Document {
   title: string;
   description: string;
@@ -10,12 +9,11 @@ export interface IBook extends Document {
   coverImage: string;
   oldPrice: number;
   newPrice: number;
-  favoritedBy?: string[]; // Optional field for favorite users
+  favoritedBy?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-// Define the schema for the Book model
 const bookSchema: Schema<IBook> = new mongoose.Schema(
   {
     title: {

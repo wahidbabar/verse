@@ -1,8 +1,8 @@
 import React from "react";
 import { useAuth } from "../../../context/AuthContext";
-import { useGetOrdersByEmail } from "@/api/orders";
 import { FiAlertTriangle } from "react-icons/fi";
 import Loading from "@/components/Loading";
+import { useGetOrdersByUserId } from "@/api/orders";
 
 interface Address {
   city: string;
@@ -36,7 +36,7 @@ const UserDashboard: React.FC = () => {
     data: orders = [],
     isLoading,
     isError,
-  } = useGetOrdersByEmail(currentUser?.email!) as OrderQueryResponse;
+  } = useGetOrdersByUserId(currentUser?.uid!) as OrderQueryResponse;
 
   if (isLoading || loadingUser) {
     return <Loading />;

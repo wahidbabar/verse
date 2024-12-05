@@ -6,6 +6,7 @@ import bookRoutes from "./src/books/book.route";
 import orderRoutes from "./src/orders/order.route";
 import userRoutes from "./src/users/user.route";
 import adminRoutes from "./src/stats/admin-stats.route";
+import bodyParser from "body-parser";
 
 // Load environment variables
 dotenv.config();
@@ -18,9 +19,11 @@ const corsOptions: cors.CorsOptions = {
   origin: ["http://localhost:5173", "https://verse-gray.vercel.app"],
   credentials: true,
 };
+app.use("/api/orders/webhook", bodyParser.raw({ type: "application/json" }));
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 
 // Routes

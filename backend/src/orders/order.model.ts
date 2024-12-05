@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-// Interface for Address
-interface IAddress {
+export interface IAddress {
   streetAddress: string;
   city: string;
   country?: string;
@@ -9,21 +8,22 @@ interface IAddress {
   zipcode?: string;
 }
 
-// Interface for Order
 export interface IOrder extends Document {
-  name: string;
+  userId: string;
   email: string;
   address: IAddress;
-  phone: number;
-  productIds: mongoose.Types.ObjectId[];
+  phone: string;
+  bookIds: mongoose.Types.ObjectId[];
   totalPrice: number;
+  paymentStatus: "pending" | "paid" | "failed";
+  stripeSessionId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const orderSchema = new Schema(
+const orderSchema = new Schema<IOrder>(
   {
-    name: {
+    userId: {
       type: String,
       required: true,
     },
@@ -32,23 +32,17 @@ const orderSchema = new Schema(
       required: true,
     },
     address: {
-      streetAddress: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
+      streetAddress: { type: String, required: true },
+      city: { type: String, required: true },
       country: String,
       state: String,
       zipcode: String,
     },
     phone: {
-      type: Number,
+      type: String,
       required: true,
     },
-    productIds: [
+    bookIds: [
       {
         type: Schema.Types.ObjectId,
         ref: "Book",
@@ -58,10 +52,17 @@ const orderSchema = new Schema(
     totalPrice: {
       type: Number,
       required: true,
+      min: 0,
     },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "failed"],
+      default: "pending",
+    },
+    stripeSessionId: String,
   },
   {
-    timestamps: true,
+    timestamps: true, // Adds `createdAt` and `updatedAt` timestamps
   }
 );
 

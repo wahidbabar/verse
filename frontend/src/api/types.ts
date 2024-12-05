@@ -48,6 +48,7 @@ export interface IOrder {
 }
 
 export interface CreateOrderRequest {
+  userId: string;
   name: string;
   email: string;
   address: IAddress;
@@ -62,3 +63,11 @@ export interface DashboardData {
   trendingBooks: number;
   totalOrders: number;
 }
+
+export interface IOrderBook {
+  productId: string;
+  quantity: number;
+}
+
+export type PaymentMethod = "STRIPE" | "COD";
+export type PaymentStatus = "PENDING" | "PAID" | "FAILED";

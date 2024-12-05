@@ -5,13 +5,16 @@ import { useAuth } from "../../context/AuthContext";
 import { toast } from "sonner";
 
 import useCartStore from "@/store/cart-store";
-import { FaCheckCircle, FaShoppingCart } from "react-icons/fa";
-import { CreateOrderRequest } from "@/api/types";
-import { useCreateOrder } from "@/api/orders";
+import { FaCheckCircle, FaCreditCard, FaTruck } from "react-icons/fa";
+import { CreateOrderRequest, PaymentMethod } from "@/api/types";
+import {
+  useCreateCheckoutSession,
+  useCreateCashOnDeliveryOrder,
+} from "@/api/orders";
 import { BiLoader } from "react-icons/bi";
 
 const CheckoutPage = () => {
-  const { cartItems } = useCartStore();
+  const { cartItems, clearCart } = useCartStore();
   const totalPrice = cartItems
     .reduce((acc, item) => acc + item.newPrice, 0)
     .toFixed(2);
@@ -22,13 +25,24 @@ const CheckoutPage = () => {
     formState: { errors },
   } = useForm<CreateOrderRequest>();
 
-  const createOrderMutation = useCreateOrder();
+  const createCheckoutSessionMutation = useCreateCheckoutSession();
+  const createCodOrderMutation = useCreateCashOnDeliveryOrder();
   const navigate = useNavigate();
 
   const [isChecked, setIsChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(
+    null
+  );
 
   const onSubmit: SubmitHandler<CreateOrderRequest> = async (data) => {
-    const newOrder: CreateOrderRequest = {
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty. Please add items before proceeding.");
+      return;
+    }
+
+    const baseOrderData: CreateOrderRequest = {
+      userId: currentUser?.uid!,
       name: data.name,
       email: currentUser?.email!,
       address: {
@@ -39,37 +53,60 @@ const CheckoutPage = () => {
         zipcode: data.address.zipcode,
       },
       phone: data.phone,
-      productIds: cartItems.map((item) => item?._id || ""),
+      productIds: cartItems.map((item) => item._id || ""),
       totalPrice: +totalPrice,
     };
 
+    setIsLoading(true);
     try {
-      createOrderMutation.mutate(newOrder);
-      toast.success("Order Confirmed", {
-        description: "Your order has been placed successfully!",
-        position: "top-right",
-        duration: 3000,
-        onAutoClose: () => navigate("/orders"),
-      });
+      if (paymentMethod === "STRIPE") {
+        const { data: checkoutData } =
+          await createCheckoutSessionMutation.mutateAsync({
+            books: cartItems.map((item) => ({
+              // price: item.newPrice,
+              quantity: 1,
+              productId: item._id,
+              // title: item.title,
+            })),
+            userId: currentUser?.uid!,
+            address: data.address,
+            email: data?.email,
+            phone: data.phone,
+          });
+
+        // Redirect to Stripe Checkout
+        window.location.href = checkoutData.url;
+      } else if (paymentMethod === "COD") {
+        await createCodOrderMutation.mutateAsync({
+          ...baseOrderData,
+        });
+
+        toast.success("Order Placed", {
+          description:
+            "Your Cash on Delivery order has been placed successfully!",
+          position: "top-right",
+          duration: 3000,
+          onAutoClose: () => {
+            clearCart();
+            navigate("/orders");
+          },
+        });
+      }
     } catch (error) {
-      console.error("Error placing an order", error);
+      console.error("Error processing order:", error);
       toast.error("Order Failed", {
         description: "Unable to place your order. Please try again.",
         position: "top-right",
         duration: 3000,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  if (createOrderMutation.isPending) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500">
-          <BiLoader />
-        </div>
-      </div>
-    );
-  }
+  const handlePaymentMethodChange = (method: PaymentMethod) => {
+    setPaymentMethod(method);
+  };
 
   return (
     <section className="bg-gray-100 min-h-screen flex items-center justify-center">
@@ -79,15 +116,45 @@ const CheckoutPage = () => {
           <div className="bg-blue-50 p-6 border-b">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-                  <FaShoppingCart className="mr-3 text-blue-600" />
-                  Cash On Delivery
-                </h2>
+                <h2 className="text-2xl font-bold text-gray-800">Checkout</h2>
                 <div className="mt-2 text-gray-600">
                   <p>Total Items: {cartItems.length}</p>
                   <p>Total Price: ${totalPrice}</p>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Payment Method Selection */}
+          <div className="p-6 border-b">
+            <h3 className="text-xl font-semibold mb-4 text-gray-700">
+              Select Payment Method
+            </h3>
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => handlePaymentMethodChange("STRIPE")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md border transition-colors ${
+                  paymentMethod === "STRIPE"
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <FaCreditCard />
+                Online Payment
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePaymentMethodChange("COD")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md border transition-colors ${
+                  paymentMethod === "COD"
+                    ? "bg-green-600 text-white border-green-600"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <FaTruck />
+                Cash on Delivery
+              </button>
             </div>
           </div>
 
@@ -267,6 +334,7 @@ const CheckoutPage = () => {
               </div>
             </div>
 
+            {/* Terms & Conditions */}
             <div className="mt-6 flex items-center">
               <input
                 type="checkbox"
@@ -290,15 +358,26 @@ const CheckoutPage = () => {
               </label>
             </div>
 
+            {/* Submit Button */}
             <div className="mt-6 text-right">
               <button
                 type="submit"
-                disabled={!isChecked}
-                className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors 
-                  disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                disabled={
+                  !isChecked || !paymentMethod || isLoading || !cartItems.length
+                }
+                className={`bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors 
+                  disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2`}
               >
-                <FaCheckCircle />
-                Place Order
+                {isLoading ? (
+                  <BiLoader className="animate-spin" />
+                ) : (
+                  <FaCheckCircle />
+                )}
+                {isLoading
+                  ? "Processing Order..."
+                  : paymentMethod === "STRIPE"
+                  ? "Proceed to Payment"
+                  : "Place COD Order"}
               </button>
             </div>
           </form>

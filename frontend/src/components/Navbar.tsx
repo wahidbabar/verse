@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
   const { cartItems } = useCartStore();
   const queryClient = useQueryClient();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const searchResultsRef = useRef<HTMLDivElement>(null); // New ref for Search Results
+  const searchResultsRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { currentUser, logout } = useAuth();
   const [searchTerm, setSearchTerm] = useState<string>("");

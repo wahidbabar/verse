@@ -1,8 +1,9 @@
 import useCartStore from "@/store/cart-store";
 import { IBook } from "@/api/types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const { cartItems, removeFromCart, clearCart } = useCartStore();
 
   const totalPrice = cartItems
@@ -18,6 +19,13 @@ const CartPage = () => {
     clearCart();
   };
 
+  // Handle checkout navigation
+  const handleCheckout = () => {
+    if (cartItems.length > 0) {
+      navigate("/checkout");
+    }
+  };
+
   return (
     <>
       <div className="flex mt-12 h-full flex-col overflow-hidden bg-white shadow-xl">
@@ -26,15 +34,17 @@ const CartPage = () => {
             <div className="text-lg font-medium text-gray-900">
               Shopping cart
             </div>
-            <div className="ml-3 flex h-7 items-center ">
-              <button
-                type="button"
-                onClick={handleClearCart}
-                className="relative -m-2 py-1 px-2 bg-red-500 text-white rounded-md hover:bg-secondary transition-all duration-200  "
-              >
-                <span className="">Clear Cart</span>
-              </button>
-            </div>
+            {cartItems.length > 0 && (
+              <div className="ml-3 flex h-7 items-center ">
+                <button
+                  type="button"
+                  onClick={handleClearCart}
+                  className="relative -m-2 py-1 px-2 bg-red-500 text-white rounded-md hover:bg-secondary transition-all duration-200  "
+                >
+                  <span className="">Clear Cart</span>
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="mt-8">
@@ -99,12 +109,18 @@ const CartPage = () => {
             Shipping and taxes calculated at checkout.
           </p>
           <div className="mt-6">
-            <Link
-              to="/checkout"
-              className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+            <button
+              onClick={handleCheckout}
+              disabled={cartItems.length === 0}
+              className={`flex items-center justify-center rounded-md border border-transparent px-6 py-3 text-base font-medium text-white shadow-sm 
+                ${
+                  cartItems.length > 0
+                    ? "bg-indigo-600 hover:bg-indigo-700"
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
             >
               Checkout
-            </Link>
+            </button>
           </div>
           <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
             <Link to="/">

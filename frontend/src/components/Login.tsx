@@ -47,7 +47,11 @@ const Login: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
       setIsLoading(true);
-      await loginUser(data.email, data.password);
+      const res = await loginUser(data.email, data.password);
+      if (res) {
+        const token = await res.user.getIdToken();
+        localStorage.setItem("token", token);
+      }
       setIsLoading(false);
       toast.success("Login Successful", {
         description: "Welcome back to Book Store!",
