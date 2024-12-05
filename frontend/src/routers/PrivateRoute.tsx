@@ -4,13 +4,15 @@ import { getAuth, onIdTokenChanged } from "firebase/auth";
 import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { isTokenValid } from "@/lib/utils";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const { currentUser, loading, logout } = useAuth();
+  const { loading, logout } = useAuth();
+  const validToken = isTokenValid();
   const { setUserId } = useCartStore();
   const auth = getAuth();
 
@@ -33,7 +35,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     return <Loading />;
   }
 
-  if (currentUser) {
+  if (validToken) {
     return <>{children}</>;
   }
 
