@@ -17,6 +17,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const unsubscribe = onIdTokenChanged(auth, (user) => {
       if (!user) {
         // User is logged out
+        localStorage.removeItem("token");
         logout();
       }
     });
