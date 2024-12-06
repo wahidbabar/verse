@@ -124,8 +124,6 @@ const Navbar: React.FC = () => {
     setIsDropdownOpen(false);
   };
 
-  console.log(validToken);
-
   return (
     <header className="w-full max-w-screen-xl mx-auto px-2 sm:px-4 py-4">
       <nav className="flex justify-between items-center">

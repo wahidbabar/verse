@@ -9,6 +9,7 @@ import {
   toggleFavoriteBook,
   updateBook,
 } from "./book.controller";
+import multer from "multer";
 const router = express.Router();
 
 // frontend => backend server => controller => book schema  => database => send to server => back to the frontend
@@ -16,9 +17,14 @@ const router = express.Router();
 // get =  when get something back from db
 // put/patch = when edit or update something
 // delete = when delete something
-
+const upload = multer({ dest: "uploads/" });
 // post a book
-router.post("/create-book", verifyAdminToken, postABook);
+router.post(
+  "/create-book",
+  verifyAdminToken,
+  upload.single("image"),
+  postABook
+);
 
 // get all books
 router.get("/", getAllBooks);

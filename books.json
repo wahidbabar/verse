@@ -1,0 +1,464 @@
+[
+  {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "description": "A timeless novel about racial injustice, moral growth, and the complexity of human nature in the American South",
+    "category": "Classic Literature",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0446310786.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 19.99,
+    "newPrice": 15.75,
+    "createdAt": 1988
+  },
+  {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "description": "A witty and insightful exploration of love, marriage, and social class in early 19th-century England",
+    "category": "Classic Romance",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/055321215X.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 16.99,
+    "newPrice": 13.5,
+    "createdAt": 1983
+  },
+  {
+    "title": "Seabiscuit: An American Legend",
+    "author": "Laura Hillenbrand",
+    "description": "An inspiring true story of an underdog racehorse that became a symbol of hope during the Great Depression",
+    "category": "Sports Biography",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0449005615.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 29.99,
+    "newPrice": 24.25,
+    "createdAt": 2002
+  },
+  {
+    "title": "The Alchemist",
+    "author": "Paulo Coelho",
+    "description": "A philosophical novel about a young shepherd's journey to find his personal legend and discover the true meaning of life",
+    "category": "Spiritual Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0062315005.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 14.99,
+    "newPrice": 11.75,
+    "createdAt": 1988
+  },
+  {
+    "title": "A Brief History of Time",
+    "author": "Stephen Hawking",
+    "description": "A groundbreaking exploration of cosmology, quantum mechanics, and the nature of the universe for the general reader",
+    "category": "Popular Science",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0553380168.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 19.99,
+    "newPrice": 15.5,
+    "createdAt": 1988
+  },
+  {
+    "title": "The Girl with the Dragon Tattoo",
+    "author": "Stieg Larsson",
+    "description": "A gripping crime novel featuring a complex investigative journalist and a brilliant but troubled hacker",
+    "category": "Crime Thriller",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0307454546.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 23.5,
+    "newPrice": 18.99,
+    "createdAt": 2005
+  },
+  {
+    "title": "Dune",
+    "author": "Frank Herbert",
+    "description": "An epic science fiction novel exploring politics, religion, and ecology in a distant future interstellar society",
+    "category": "Science Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0441172717.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 22.99,
+    "newPrice": 18.25,
+    "createdAt": 1965
+  },
+  {
+    "title": "The Immortal Life of Henrietta Lacks",
+    "author": "Rebecca Skloot",
+    "description": "A powerful investigation into the story of Henrietta Lacks and the revolutionary impact of her cells on medical research",
+    "category": "Science Biography",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/1400052173.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 27.5,
+    "newPrice": 22,
+    "createdAt": 2010
+  },
+  {
+    "title": "Educated",
+    "author": "Tara Westover",
+    "description": "A memoir of survival, self-invention, and the transformative power of education in overcoming a challenging upbringing",
+    "category": "Memoir",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0399590501.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 26.99,
+    "newPrice": 21.5,
+    "createdAt": 2018
+  },
+  {
+    "title": "The Art of War",
+    "author": "Sun Tzu",
+    "description": "A classic treatise on military strategy, leadership, and conflict management applicable to both warfare and life",
+    "category": "Philosophy",
+    "trending": false,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0486425573.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 12.99,
+    "newPrice": 10.25,
+    "createdAt": 1910
+  },
+  {
+    "title": "Sapiens: A Brief History of Humankind",
+    "author": "Yuval Noah Harari",
+    "description": "A provocative exploration of human history, examining how humans became the dominant species on the planet",
+    "category": "World History",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0062316117.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 24.99,
+    "newPrice": 19.75,
+    "createdAt": 2014
+  },
+  {
+    "title": "The Catcher in the Rye",
+    "author": "J.D. Salinger",
+    "description": "A story about adolescent angst and rebellion, following the journey of Holden Caulfield in New York City",
+    "category": "Classic Literature",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0316769487.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 15.99,
+    "newPrice": 12.99,
+    "createdAt": 1951
+  },
+  {
+    "title": "Becoming",
+    "author": "Michelle Obama",
+    "description": "A deeply personal and inspiring memoir by the former First Lady of the United States",
+    "category": "Memoir",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/1524763136.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 32.5,
+    "newPrice": 26.75,
+    "createdAt": 2018
+  },
+  {
+    "title": "The Road",
+    "author": "Cormac McCarthy",
+    "description": "A post-apocalyptic tale of a father and son's survival in a barren, dangerous world",
+    "category": "Post-Apocalyptic Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0307387895.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 17.5,
+    "newPrice": 14.99,
+    "createdAt": 2006
+  },
+  {
+    "title": 1984,
+    "author": "George Orwell",
+    "description": "A dystopian novel exploring totalitarianism, surveillance, and societal control",
+    "category": "Dystopian Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0451524934.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 15.99,
+    "newPrice": 13.25,
+    "createdAt": 1949
+  },
+  {
+    "title": "The Power of Habit",
+    "author": "Charles Duhigg",
+    "description": "A practical guide on understanding and reshaping habits to achieve personal and professional success",
+    "category": "Self-help",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/081298160X.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 16.99,
+    "newPrice": 13.75,
+    "createdAt": 2012
+  },
+  {
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "description": "A science-backed guide to building good habits and breaking bad ones for transformative results",
+    "category": "Self-help",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0735211299.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 27,
+    "newPrice": 21.99,
+    "createdAt": 2018
+  },
+  {
+    "title": "The Subtle Art of Not Giving a F*ck",
+    "author": "Mark Manson",
+    "description": "A counterintuitive approach to living a good life by focusing on what truly matters",
+    "category": "Self-help",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0062457713.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 24.99,
+    "newPrice": 19.99,
+    "createdAt": 2016
+  },
+  {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "description": "A portrayal of the Jazz Age and the American Dream's corruption, centering on Jay Gatsby's tragic story",
+    "category": "Classic Literature",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0743273567.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 14.99,
+    "newPrice": 12.75,
+    "createdAt": 1925
+  },
+  {
+    "title": "Thinking, Fast and Slow",
+    "author": "Daniel Kahneman",
+    "description": "An exploration of the two systems that drive human thought processes: the intuitive and the deliberate",
+    "category": "Psychology",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0374533555.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 20.99,
+    "newPrice": 16.5,
+    "createdAt": 2011
+  },
+  {
+    "title": "Where the Crawdads Sing",
+    "author": "Delia Owens",
+    "description": "A compelling tale blending romance, mystery, and nature in the marshlands of North Carolina",
+    "category": "Contemporary Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0735219109.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 26,
+    "newPrice": 20.99,
+    "createdAt": 2018
+  },
+  {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "description": "A dystopian novel exploring a futuristic society shaped by technological advancements and loss of individuality",
+    "category": "Dystopian Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0060850523.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 16.5,
+    "newPrice": 13.99,
+    "createdAt": 1932
+  },
+  {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "description": "A classic dystopian novel about a society where books are banned and 'firemen' burn them",
+    "category": "Dystopian Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/1451673310.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 14.99,
+    "newPrice": 11.5,
+    "createdAt": 1953
+  },
+  {
+    "title": "The Hobbit",
+    "author": "J.R.R. Tolkien",
+    "description": "A fantasy adventure following Bilbo Baggins as he embarks on a quest to recover stolen treasure",
+    "category": "Fantasy",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/054792822X.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 17.99,
+    "newPrice": 14.5,
+    "createdAt": 1937
+  },
+  {
+    "title": "The Shining",
+    "author": "Stephen King",
+    "description": "A chilling horror novel about a family's experiences in an isolated, haunted hotel",
+    "category": "Horror",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0307743659.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 16.99,
+    "newPrice": 13.99,
+    "createdAt": 1977
+  },
+  {
+    "title": "Gone Girl",
+    "author": "Gillian Flynn",
+    "description": "A psychological thriller that delves into the complexities of marriage and deception",
+    "category": "Psychological Thriller",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0307588378.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 19.99,
+    "newPrice": 15.5,
+    "createdAt": 2012
+  },
+  {
+    "title": "The Book Thief",
+    "author": "Markus Zusak",
+    "description": "A moving novel about a young girl living in Nazi Germany, narrated by Death",
+    "category": "Historical Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0375842209.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 14.99,
+    "newPrice": 12.25,
+    "createdAt": 2005
+  },
+  {
+    "title": "The Fault in Our Stars",
+    "author": "John Green",
+    "description": "A poignant story of two teenagers who fall in love while battling cancer",
+    "category": "Young Adult Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/014242417X.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 12.99,
+    "newPrice": 10.5,
+    "createdAt": 2012
+  },
+  {
+    "title": "The Hunger Games",
+    "author": "Suzanne Collins",
+    "description": "A gripping dystopian novel about survival, rebellion, and resilience in a totalitarian society",
+    "category": "Young Adult Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0439023521.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 18.99,
+    "newPrice": 15.75,
+    "createdAt": 2008
+  },
+  {
+    "title": "The Martian",
+    "author": "Andy Weir",
+    "description": "A science fiction novel about an astronaut stranded on Mars, using his ingenuity to survive",
+    "category": "Science Fiction",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0553418025.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 16.99,
+    "newPrice": 13.5,
+    "createdAt": 2011
+  },
+  {
+    "title": "Circe",
+    "author": "Madeline Miller",
+    "description": "A reimagining of the mythical sorceress from Greek mythology, exploring her life and powers",
+    "category": "Historical Fantasy",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0316556327.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 26.99,
+    "newPrice": 21.75,
+    "createdAt": 2018
+  },
+  {
+    "title": "Murder on the Orient Express",
+    "author": "Agatha Christie",
+    "description": "A classic detective novel featuring Hercule Poirot solving a murder on a luxurious train",
+    "category": "Mystery",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0062693662.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 15.99,
+    "newPrice": 12.99,
+    "createdAt": 1934
+  },
+  {
+    "title": "The Name of the Wind",
+    "author": "Patrick Rothfuss",
+    "description": "An epic fantasy following the legendary wizard Kvothe and his extraordinary life story",
+    "category": "Fantasy",
+    "trending": true,
+    "coverImage": {
+      "public_id": null,
+      "url": "http://images.amazon.com/images/P/0756404746.01.THUMBZZZ.jpg"
+    },
+    "oldPrice": 22.99,
+    "newPrice": 18.5,
+    "createdAt": 2007
+  }
+]

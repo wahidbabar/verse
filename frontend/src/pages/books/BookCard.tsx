@@ -22,7 +22,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
         <div className="sm:w-48 sm:flex-shrink-0">
           <Link to={`/books/${book._id}`}>
             <img
-              src={book.coverImage}
+              src={book.coverImage.url}
               alt={book.title}
               className="w-full h-auto rounded-md cursor-pointer hover:scale-105 transition-transform duration-200"
             />

@@ -6,7 +6,10 @@ export interface IBook extends Document {
   category: string;
   author: string;
   trending: boolean;
-  coverImage: string;
+  coverImage: {
+    public_id?: string;
+    url: string;
+  };
   oldPrice: number;
   newPrice: number;
   favoritedBy?: string[];
@@ -37,8 +40,8 @@ const bookSchema: Schema<IBook> = new mongoose.Schema(
       required: true,
     },
     coverImage: {
-      type: String,
-      required: true,
+      public_id: { type: String },
+      url: { type: String },
     },
     oldPrice: {
       type: Number,

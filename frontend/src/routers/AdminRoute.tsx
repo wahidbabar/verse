@@ -7,7 +7,7 @@ interface AdminRouteProps {
 }
 
 const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admin_token");
 
   if (!token) {
     return <Navigate to="/admin" />;

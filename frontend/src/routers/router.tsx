@@ -15,6 +15,7 @@ import ManageBooks from "@/pages/dashboard/manageBooks/ManageBooks";
 import UserDashboard from "@/pages/dashboard/users/UserDashboard";
 import FavoriteBooks from "@/pages/home/FavoriteBooks";
 import Home from "@/pages/home/Home";
+import { QueryProvider } from "@/providers/query-client";
 import AdminRoute from "@/routers/AdminRoute";
 import PrivateRoute from "@/routers/PrivateRoute";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
@@ -92,7 +93,11 @@ const routes: RouteObject[] = [
   },
   {
     path: "/admin",
-    element: <AdminLogin />,
+    element: (
+      <QueryProvider>
+        <AdminLogin />
+      </QueryProvider>
+    ),
   },
   {
     path: "/dashboard",

@@ -1,15 +1,19 @@
 export interface IBook {
   _id: string;
   title: string;
-  author: string;
   description: string;
   category: string;
-  trending?: boolean;
-  favoritedBy: string[];
-  coverImage: string;
-  oldPrice?: number;
+  author: string;
+  trending: boolean;
+  coverImage: {
+    public_id?: string;
+    url: string;
+  };
+  oldPrice: number;
   newPrice: number;
-  createdAt?: string;
+  favoritedBy?: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface CreateBookRequest {
@@ -18,13 +22,21 @@ export interface CreateBookRequest {
   description: string;
   category: string;
   trending?: boolean;
-  coverImage: string;
-  oldPrice?: number;
+  coverImage: File | null;
+  oldPrice: number;
   newPrice: number;
 }
 
-export interface UpdateBookRequest extends CreateBookRequest {
+export interface UpdateBookRequest {
   id: string;
+  title: string;
+  author: string;
+  description: string;
+  category: string;
+  trending?: boolean;
+  oldPrice: number;
+  newPrice: number;
+  coverImage?: File | null;
 }
 
 export interface IAddress {

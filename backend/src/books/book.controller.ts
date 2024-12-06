@@ -1,15 +1,39 @@
 import { Request, Response } from "express";
-import Book, { IBook } from "./book.model";
+import cloudinary from "../config/cloudinaryConfig";
+import Book from "./book.model";
 
-interface BookRequest extends Request {
-  body: Partial<IBook>;
-}
-
-// Create a new book
-const postABook = async (req: BookRequest, res: Response): Promise<void> => {
+const postABook = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newBook = new Book({ ...req.body });
+    // Check if file exists
+    if (!req.file) {
+      res.status(400).json({ message: "No image uploaded" });
+      return;
+    }
+
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "bookstore",
+      resource_type: "image",
+    });
+
+    // Create new book with Cloudinary image details
+    const newBook = new Book({
+      title: req.body.title,
+      description: req.body.description,
+      author: req.body.author,
+      category: req.body.category,
+      trending: req.body.trending === true,
+      oldPrice: req.body.oldPrice,
+      newPrice: req.body.newPrice,
+      coverImage: {
+        public_id: result.public_id,
+        url: result.secure_url,
+      },
+    });
+
+    // Save book to database
     const savedBook = await newBook.save();
+
     res.status(201).json({
       message: "Book posted successfully",
       book: savedBook,
@@ -53,18 +77,47 @@ const getSingleBook = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Update a book
-const updateBook = async (req: BookRequest, res: Response): Promise<void> => {
+const updateBook = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const updatedBook = await Book.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
 
-    if (!updatedBook) {
+    // Find the existing book
+    const existingBook = await Book.findById(id);
+    if (!existingBook) {
       res.status(404).json({ message: "Book not found!" });
       return;
     }
+
+    // Prepare updated data
+    const updatedData: Partial<typeof existingBook> = {
+      ...req.body, // Include all fields from the request body
+    };
+
+    // Check if a new file is provided
+    if (req.file) {
+      // Upload new image to Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "bookstore",
+        resource_type: "image",
+      });
+
+      // Add Cloudinary details to `coverImage`
+      updatedData.coverImage = {
+        public_id: result.public_id,
+        url: result.secure_url,
+      };
+
+      // Optionally, you can delete the old image from Cloudinary
+      if (existingBook.coverImage?.public_id) {
+        await cloudinary.uploader.destroy(existingBook.coverImage.public_id);
+      }
+    }
+
+    // Update the book in the database
+    const updatedBook = await Book.findByIdAndUpdate(id, updatedData, {
+      new: true, // Return the updated document
+      runValidators: true, // Ensure schema validation
+    });
 
     res.status(200).json({
       message: "Book updated successfully",
@@ -218,7 +271,7 @@ export {
   getAllBooks,
   getSingleBook,
   postABook,
-  updateBook,
   searchBooks,
   toggleFavoriteBook,
+  updateBook,
 };

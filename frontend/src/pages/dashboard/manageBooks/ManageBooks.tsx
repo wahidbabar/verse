@@ -1,4 +1,5 @@
-import { useDeleteBook, useFetchBooks } from "@/api/books";
+import { useDeleteBook } from "@/api/admin-book";
+import { useFetchBooks } from "@/api/books";
 import React from "react";
 import { BiEdit } from "react-icons/bi";
 import { BsTrash2 } from "react-icons/bs";

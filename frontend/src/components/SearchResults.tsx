@@ -20,9 +20,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({ books, isLoading }) => {
                 className="flex items-center space-x-4 text-gray-700 hover:text-primary"
               >
                 {/* Book Image */}
-                {book.coverImage && (
+                {book.coverImage.url && (
                   <img
-                    src={book.coverImage}
+                    src={book.coverImage.url}
                     alt={book.title}
                     className="w-12 h-16 object-cover rounded"
                   />

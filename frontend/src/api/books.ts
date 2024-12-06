@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import axios from "axios";
-import { CreateBookRequest, IBook, UpdateBookRequest } from "./types";
+import { IBook } from "./types";
 
 // Base axios instance
 const api = axios.create({
@@ -47,42 +47,6 @@ export const useFetchBookById = (id: string) => {
       return data.book;
     },
     enabled: !!id,
-  });
-};
-
-export const useAddBook = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (newBook: CreateBookRequest) =>
-      api.post("/create-book", newBook),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["books"] });
-    },
-  });
-};
-
-export const useUpdateBook = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, ...bookData }: UpdateBookRequest) =>
-      api.put(`/edit/${id}`, bookData),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["books"] });
-      queryClient.invalidateQueries({ queryKey: ["book", variables.id] });
-    },
-  });
-};
-
-export const useDeleteBook = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (id: string) => api.delete(`/${id}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["books"] });
-    },
   });
 };
 

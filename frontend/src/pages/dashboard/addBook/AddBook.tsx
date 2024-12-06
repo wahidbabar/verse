@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import InputField from "./InputField";
 import SelectField from "./SelectField";
 import { CreateBookRequest } from "@/api/types";
-import { useAddBook } from "@/api/books";
+import { useAddBook } from "@/api/admin-book";
 
 const AddBook: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +22,7 @@ const AddBook: React.FC = () => {
   });
 
   // State for image handling
-  const [, setImageFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFileName, setImageFileName] = useState<string>("");
 
   // Mutation hook
@@ -47,7 +47,7 @@ const AddBook: React.FC = () => {
 
     const newBookData = {
       ...data,
-      coverImage: imageFileName,
+      coverImage: imageFile,
     };
 
     try {
@@ -121,14 +121,14 @@ const AddBook: React.FC = () => {
         <InputField
           label="Description"
           name="description"
-          placeholder="Enter book author"
+          placeholder="Enter book description"
           register={register}
           errors={errors}
           validation={{
-            required: "Author is required",
+            required: "Description is required",
             minLength: {
-              value: 3,
-              message: "Author must be at least 3 characters",
+              value: 10,
+              message: "Description must be at least 10 characters",
             },
           }}
         />
@@ -138,14 +138,14 @@ const AddBook: React.FC = () => {
           label="Author"
           name="author"
           type="text"
-          placeholder="Enter book description"
+          placeholder="Enter book author"
           register={register}
           errors={errors}
           validation={{
-            required: "Description is required",
+            required: "Author is required",
             minLength: {
-              value: 10,
-              message: "Description must be at least 10 characters",
+              value: 3,
+              message: "Author must be at least 3 characters",
             },
           }}
         />
@@ -181,7 +181,7 @@ const AddBook: React.FC = () => {
           <InputField
             label="Old Price"
             name="oldPrice"
-            type="number"
+            type="text"
             placeholder="Old Price"
             register={register}
             errors={errors}
@@ -197,7 +197,7 @@ const AddBook: React.FC = () => {
           <InputField
             label="New Price"
             name="newPrice"
-            type="number"
+            type="text"
             placeholder="New Price"
             register={register}
             errors={errors}

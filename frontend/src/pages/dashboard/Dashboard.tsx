@@ -2,7 +2,7 @@ import React from "react";
 import { MdIncompleteCircle } from "react-icons/md";
 import Loading from "../../components/Loading";
 import RevenueChart from "./RevenueChart";
-import { useDashboardStats } from "@/api/admin-stats";
+import { useDashboardStats } from "@/api/admin";
 
 const Dashboard: React.FC = () => {
   const { data, isLoading, error } = useDashboardStats();
