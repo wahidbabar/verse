@@ -1,117 +1,6 @@
-# Full-Stack Book Store Application (MERN)
+# Full-Stack Book Store Application
 
-![Book Store Project Cover](frontend/src/assets/github-cover.png)
-
-## 📜 Project Overview
-
-This project is a full-stack **Book Store Application** built using the MERN stack. It allows users to browse, purchase, and manage their book collections. The frontend is developed with React and Vite, while the backend uses Express.js and MongoDB.
-
----
-
-## **Table of Contents**
-
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Setup Instructions](#setup-instructions)
-  - [Frontend Setup](#frontend-setup)
-  - [Backend Setup](#backend-setup)
-- [Scripts](#scripts)
-- [Author](#author)
-- [License](#license)
-
----
-
-## **Features**
-
-- **User Authentication:**
-  - Secure login and registration using Firebase Authentication.
-- **Book Management:**
-  - View book listings, categories, and details.
-  - Add books to a personal collection or shopping cart.
-- **Responsive Design:**
-  - Fully responsive UI for seamless access across devices.
-- **Backend Integration:**
-  - RESTful API for secure communication between frontend and backend.
-- **Data Security:**
-  - Passwords secured using JWT for session management.
-
----
-
-## 🛠️ **Tech Stack**
-
-### **Frontend**
-
-- **React**: UI development.
-- **Vite**: Fast development build tool.
-- **Firebase**: Authentication and real-time data handling.
-
-### **Backend**
-
-- **Express.js**: Web server framework.
-- **MongoDB**: Database for storing application data.
-- **Mongoose**: Object Data Modeling (ODM) for MongoDB.
-- **JWT**: Token-based authentication.
-- **dotenv**: Environment variable management.
-
----
-
-## **Setup Instructions**
-
-### **Frontend Setup**
-
-1. **Navigate to the Frontend Directory:**
-   ```bash
-   cd frontend
-
-Create a .env.local file with Firebase credentials
-envCopyVITE_API_KEY="your-firebase-api-key"
-VITE_AUTH_DOMAIN="your-firebase-auth-domain"
-VITE_PROJECT_ID="your-firebase-project-id"
-VITE_STORAGE_BUCKET="your-firebase-storage-bucket"
-VITE_MESSAGING_SENDER_ID="your-firebase-sender-id"
-VITE_APP_ID="your-firebase-app-id"
-
-Install dependencies
-bashCopynpm install
-
-Start the development server
-bashCopynpm run dev
-
-Access the app at http://localhost:5173
-
-Backend Setup
-
-Navigate to the backend directory
-bashCopycd backend
-
-Create a .env file with MongoDB and JWT configurations
-envCopyDB_URL="your-mongodb-connection-string"
-JWT_SECRET_KEY="your-jwt-secret-key"
-
-Install dependencies
-bashCopynpm install
-
-Start the backend server
-bashCopynpm run start:dev
-
-Ensure MongoDB is running and replace DB_URL with your credentials
-
-📜 Scripts
-Frontend Scripts
-ScriptDescriptionnpm run devStart development servernpm run buildBuild production-ready appnpm run previewPreview production build
-Backend Scripts
-ScriptDescriptionnpm run startStart server in production modenpm run start:devStart server in development mode
-👤 Author
-
-Name: Akash Deep
-Email: contact.akashdeep023@gmail.com
-LinkedIn: Akash Deep
-
-📄 License
-This project is licensed under the MIT License.
-
-Happy Coding! 🚀📖
-
+## Overview
 This README provides a comprehensive overview of your Full-Stack Book Store Application. It includes:
 
 - An attractive project cover image
@@ -122,4 +11,114 @@ This README provides a comprehensive overview of your Full-Stack Book Store Appl
 - Author information
 - License details
 
-Feel free to customize it further to match your specific project requirements. The markdown is formatted for maximum readability and includes helpful sections to guide potential users and contributors.
+## Features
+- User authentication and authorization
+- Book listing and management
+- Secure payment processing with Stripe
+- Cloud storage for book images with Cloudinary
+
+## Tech Stack
+- **Frontend:** React, Redux, Tailwind CSS
+- **Backend:** Node.js, Express, MongoDB
+- **Authentication:** JWT, Firebase
+- **Payments:** Stripe
+- **Cloud Storage:** Cloudinary
+
+## Setup Instructions
+
+### Backend
+
+1. **Create a `.env` file** with the following configurations:
+
+    ```env
+    DB_URL="your-mongodb-connection-string"
+    JWT_SECRET_KEY="your-jwt-secret-key"
+    STRIPE_SECRET_KEY="your-stripe-secret-key"
+    STRIPE_WEBHOOK_SECRET="your-stripe-webhook-secret"
+    CLIENT_URL="http://localhost:5173"
+    FIREBASE_PROJECT_ID="your-firebase-project-id"
+    CLOUDINARY_CLOUD_NAME="your-cloudinary-cloud-name"
+    CLOUDINARY_API_KEY="your-cloudinary-api-key"
+    CLOUDINARY_API_SECRET="your-cloudinary-api-secret"
+    ```
+
+2. **Install dependencies**:
+
+    ```bash
+    npm install
+    ```
+
+3. **Start the backend server**:
+
+    ```bash
+    npm run start:dev
+    ```
+
+4. **Ensure MongoDB is running** and replace `DB_URL` with your credentials.
+
+### Frontend
+
+1. **Create a `.env` file** with the following configurations:
+
+    ```env
+    VITE_API_KEY="your-firebase-api-key"
+    VITE_AUTH_DOMAIN="your-firebase-auth-domain"
+    VITE_PROJECT_ID="your-firebase-project-id"
+    VITE_STORAGE_BUCKET="your-firebase-storage-bucket"
+    VITE_MESSAGING_SENDER_ID="your-firebase-messaging-sender-id"
+    VITE_APP_ID="your-firebase-app-id"
+    VITE_DEV_ENVIRONMENT="development"
+    VITE_STRIPE_PUBLISHABLE_KEY="your-stripe-publishable-key"
+    API_URL="http://localhost:5000"
+    ```
+
+2. **Install dependencies**:
+
+    ```bash
+    npm install
+    ```
+
+3. **Start the development server**:
+
+    ```bash
+    npm run dev
+    ```
+
+### Obtaining Credentials
+
+- **MongoDB:** Sign up at MongoDB Atlas and create a new cluster. Obtain your connection string from the cluster's connection settings.
+- **JWT Secret Key:** Generate a secure key using a tool like randomkeygen.
+- **Stripe:** Sign up at Stripe and get your API keys from the Developers section.
+- **Cloudinary:** Sign up at Cloudinary and get your API credentials from the Dashboard.
+- **Firebase:** Go to the Firebase Console, create a new project, and obtain your configuration details from the project settings.
+
+## Scripts
+
+### Frontend Scripts
+
+| Script        | Description                      |
+| ------------- | -------------------------------- |
+| `npm run dev` | Start development server         |
+| `npm run build` | Build production-ready app      |
+| `npm run preview` | Preview production build      |
+
+### Backend Scripts
+
+| Script        | Description                      |
+| ------------- | -------------------------------- |
+| `npm run start` | Start server in production mode |
+| `npm run start:dev` | Start server in development mode |
+
+## Author
+
+**Name:** Akash Deep  
+**Email:** contact.akashdeep023@gmail.com  
+**LinkedIn:** Akash Deep
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+Happy Coding! 🚀📖
