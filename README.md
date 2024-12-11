@@ -1,7 +1,7 @@
-# Full-Stack Book Store Application
+# Verse Book Store Application
 
 ## Overview
-This README provides a comprehensive overview of your Full-Stack Book Store Application. It includes:
+This README provides a comprehensive overview of Verse Book Store Application. It includes:
 
 - An attractive project cover image
 - Detailed feature descriptions
@@ -18,7 +18,7 @@ This README provides a comprehensive overview of your Full-Stack Book Store Appl
 - Cloud storage for book images with Cloudinary
 
 ## Tech Stack
-- **Frontend:** React, Redux, Tailwind CSS
+- **Frontend:** React, Zustand, Tanstack Query, Tailwind CSS
 - **Backend:** Node.js, Express, MongoDB
 - **Authentication:** JWT, Firebase
 - **Payments:** Stripe
