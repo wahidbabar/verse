@@ -101,23 +101,26 @@ This README provides a comprehensive overview of your Full-Stack Book Store Appl
 | `npm run dev` | Start development server         |
 | `npm run build` | Build production-ready app      |
 | `npm run preview` | Preview production build      |
+| `npm run lint` | Lint the codebase               |
 
 ### Backend Scripts
 
 | Script        | Description                      |
 | ------------- | -------------------------------- |
 | `npm run start` | Start server in production mode |
-| `npm run start:dev` | Start server in development mode |
+| `npm run dev` | Start server in development mode with nodemon |
+| `npm run build` | Compile TypeScript to JavaScript |
+| `npm run prebuild` | Clean the `dist` directory before building |
+| `npm run watch` | Watch for changes and recompile TypeScript |
+| `npm run clean` | Remove the `dist` directory    |
+| `npm run lint` | Lint the codebase               |
+| `npm run lint:fix` | Lint and fix issues in the codebase |
 
 ## Author
 
-**Name:** Akash Deep  
-**Email:** contact.akashdeep023@gmail.com  
-**LinkedIn:** Akash Deep
-
-## License
-
-This project is licensed under the MIT License.
+**Name:** Abdul Wahid  
+**Email:** bbabar0214@gmail.com  
+**LinkedIn:** www.linkedin.com/in//abdulwahidbabar
 
 ---
 
