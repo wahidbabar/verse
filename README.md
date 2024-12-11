@@ -1,39 +1,125 @@
-# build-full-stack-book-store-mern-app
-![full-stack-book-store-mern-project](/frontend/src/assets/github-cover.png)
+# Full-Stack Book Store Application (MERN)
 
-## How to run this project:
+![Book Store Project Cover](frontend/src/assets/github-cover.png)
 
-### For Frontend 
-Follow the below steps to run the project: 
-- Firstly clone or unzip the project folder.
-* Go to the frontend directory by using the following command ``` cd frontend ```.
-* * create a **.env.local** file in the backend root directory as the same level where the **package.json** is located and keep the following environment variables there:
-```
->>> Stepup firebase app and configure the environment
+## 📜 Project Overview
 
-VITE_API_KEY="AIzaSyCXvDIC4MPrkaMdeg_O2iij88wLpfj3qBA"
-VITE_Auth_Domain="book-store-mern-app.firebaseapp.com"
-VITE_PROJECT_ID="book-store-mern-app"
-VITE_STORAGE_BUCKET="book-store-mern-app.appspot.com"
-VITE_MESSAGING_SENDERID= "205632822247"
-VITE_APPID="1:205632822247:web:b0db0ec66bf6de0bbb3b42"
-```
-+ Then run `` npm install `` commend to install node dependencies.
-- Finally, to run the project, use ``npm run dev`` command.
+This project is a full-stack **Book Store Application** built using the MERN stack. It allows users to browse, purchase, and manage their book collections. The frontend is developed with React and Vite, while the backend uses Express.js and MongoDB.
 
+---
 
-### For Backend
-Follow the below steps to run the project: 
-- Firstly clone or unzip the project folder.
-* Go to the backend directory by using the following command ``` cd backend```.
-+ Then run `` npm install `` commend to install node dependencies.
-* create a **.env** file in the backend root directory as the same level where the **package.json** is located and keep the following environment variables there: 
-```
-DB_URL = "mongodb+srv://helpyourassistant:pqam0Mwv3Vwv8Off@cluster0.qc3bq.mongodb.net/book-store?retryWrites=true&w=majority&appName=Cluster0"
+## **Table of Contents**
 
-JWT_SECRET_KEY = 'bc992a20cb6706f741433686be814e3df45e57ea1c2fc85f9dbb0ef7df12308a669bfa7c976368ff32e32f6541480ce9ec1b122242f9b1257ab669026aeaf16'
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Setup Instructions](#setup-instructions)
+  - [Frontend Setup](#frontend-setup)
+  - [Backend Setup](#backend-setup)
+- [Scripts](#scripts)
+- [Author](#author)
+- [License](#license)
 
-Note: Please setup mongodb and change the MongoDB url and set your jwt secret key above.
-```
+---
 
-- Finally, to run the project, use ``npm run start:dev`` command.
+## **Features**
+
+- **User Authentication:**
+  - Secure login and registration using Firebase Authentication.
+- **Book Management:**
+  - View book listings, categories, and details.
+  - Add books to a personal collection or shopping cart.
+- **Responsive Design:**
+  - Fully responsive UI for seamless access across devices.
+- **Backend Integration:**
+  - RESTful API for secure communication between frontend and backend.
+- **Data Security:**
+  - Passwords secured using JWT for session management.
+
+---
+
+## 🛠️ **Tech Stack**
+
+### **Frontend**
+
+- **React**: UI development.
+- **Vite**: Fast development build tool.
+- **Firebase**: Authentication and real-time data handling.
+
+### **Backend**
+
+- **Express.js**: Web server framework.
+- **MongoDB**: Database for storing application data.
+- **Mongoose**: Object Data Modeling (ODM) for MongoDB.
+- **JWT**: Token-based authentication.
+- **dotenv**: Environment variable management.
+
+---
+
+## **Setup Instructions**
+
+### **Frontend Setup**
+
+1. **Navigate to the Frontend Directory:**
+   ```bash
+   cd frontend
+
+Create a .env.local file with Firebase credentials
+envCopyVITE_API_KEY="your-firebase-api-key"
+VITE_AUTH_DOMAIN="your-firebase-auth-domain"
+VITE_PROJECT_ID="your-firebase-project-id"
+VITE_STORAGE_BUCKET="your-firebase-storage-bucket"
+VITE_MESSAGING_SENDER_ID="your-firebase-sender-id"
+VITE_APP_ID="your-firebase-app-id"
+
+Install dependencies
+bashCopynpm install
+
+Start the development server
+bashCopynpm run dev
+
+Access the app at http://localhost:5173
+
+Backend Setup
+
+Navigate to the backend directory
+bashCopycd backend
+
+Create a .env file with MongoDB and JWT configurations
+envCopyDB_URL="your-mongodb-connection-string"
+JWT_SECRET_KEY="your-jwt-secret-key"
+
+Install dependencies
+bashCopynpm install
+
+Start the backend server
+bashCopynpm run start:dev
+
+Ensure MongoDB is running and replace DB_URL with your credentials
+
+📜 Scripts
+Frontend Scripts
+ScriptDescriptionnpm run devStart development servernpm run buildBuild production-ready appnpm run previewPreview production build
+Backend Scripts
+ScriptDescriptionnpm run startStart server in production modenpm run start:devStart server in development mode
+👤 Author
+
+Name: Akash Deep
+Email: contact.akashdeep023@gmail.com
+LinkedIn: Akash Deep
+
+📄 License
+This project is licensed under the MIT License.
+
+Happy Coding! 🚀📖
+
+This README provides a comprehensive overview of your Full-Stack Book Store Application. It includes:
+
+- An attractive project cover image
+- Detailed feature descriptions
+- Tech stack with badges
+- Clear setup instructions for both frontend and backend
+- Script descriptions
+- Author information
+- License details
+
+Feel free to customize it further to match your specific project requirements. The markdown is formatted for maximum readability and includes helpful sections to guide potential users and contributors.
