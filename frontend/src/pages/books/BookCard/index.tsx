@@ -4,6 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BookImage } from "./BookImage";
 import { BookInfo } from "./BookInfo";
 import { BookActions } from "./BookAction";
+import { useToggleFavoriteBook } from "@/api/books";
+import { useState } from "react";
 
 interface BookCardProps {
   book: IBook;
@@ -12,10 +14,19 @@ interface BookCardProps {
 
 const BookCard = ({ book, layout = "grid" }: BookCardProps) => {
   const { addToCart, userId } = useCartStore();
-  const isFavorited = book.favoritedBy?.includes(userId || "");
+  const [isFavorite, setIsFavorite] = useState(
+    book.favoritedBy?.includes(userId!)
+  );
+  const toggleFavoriteBook = useToggleFavoriteBook(userId!);
 
   const handleToggleFavorite = () => {
-    // Implement favorite toggle logic
+    setIsFavorite(!isFavorite);
+
+    toggleFavoriteBook.mutate(book._id, {
+      onError: () => {
+        setIsFavorite((prev) => !prev);
+      },
+    });
   };
 
   return (
@@ -49,7 +60,7 @@ const BookCard = ({ book, layout = "grid" }: BookCardProps) => {
             userId={userId}
             onAddToCart={addToCart}
             onToggleFavorite={handleToggleFavorite}
-            isFavorited={isFavorited}
+            isFavorited={isFavorite}
           />
         </div>
       </CardContent>
