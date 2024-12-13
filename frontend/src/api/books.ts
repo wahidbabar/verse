@@ -74,7 +74,6 @@ export const fetchBooks = async ({
   } catch (error) {
     // Handle cancellation gracefully
     if (axios.isCancel(error)) {
-      console.log("Request canceled", error.message);
       return [];
     }
     throw error;

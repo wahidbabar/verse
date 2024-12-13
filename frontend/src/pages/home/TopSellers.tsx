@@ -1,19 +1,25 @@
-import { useEffect, useState } from "react";
-import BookCard from "../books/BookCard";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
 import { useFetchBooks } from "@/api/books";
 import { IBook } from "@/api/types";
 import Loading from "@/components/Loading";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { mockBooks } from "@/utils/mockData";
-import { FiAlertTriangle } from "react-icons/fi";
+import { BookOpen } from "lucide-react";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { BiChevronDown } from "react-icons/bi";
+import { Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import BookCard from "../books/BookCard";
 
 const categories = [
-  "Choose a genre",
+  "All Genres",
   "Business",
   "Fiction",
   "Horror",
@@ -29,10 +35,9 @@ const categories = [
 ];
 
 const TopSellers = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Choose a genre");
+  const [selectedCategory, setSelectedCategory] = useState("All Genres");
   const [books, setBooks] = useState<IBook[] | undefined>(mockBooks);
   const { data, isLoading } = useFetchBooks();
-  // const data = mockBooks;
 
   useEffect(() => {
     if (data) {
@@ -40,108 +45,76 @@ const TopSellers = () => {
     }
   }, [data]);
 
-  if (!books && isLoading) {
-    return <Loading />;
-  }
+  if (!books && isLoading) return <Loading />;
 
   if (!books) {
-    <div className="h-screen flex flex-1 items-center justify-center flex-col gap-2">
-      <FiAlertTriangle className="size-8 text-muted-foreground" />
-      <span className="text-sm text-muted-foreground">No books found</span>
-    </div>;
+    return (
+      <div className="flex items-center justify-center h-64 bg-muted/10 rounded-lg">
+        <div className="text-center space-y-2">
+          <BookOpen className="w-8 h-8 mx-auto text-muted-foreground" />
+          <p className="text-muted-foreground">No books available</p>
+        </div>
+      </div>
+    );
   }
 
   const filteredBooks =
-    selectedCategory === "Choose a genre"
+    selectedCategory === "All Genres"
       ? books
       : books?.filter((book) => book.category === selectedCategory);
 
   return (
-    <div className="py-10">
-      <h2 className="text-3xl font-semibold mb-6">Top Sellers</h2>
-      {/* category filtering */}
-      <div className="relative w-full max-w-xs mb-8">
-        <div className="relative">
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            name="category"
-            id="category"
-            className="
-            appearance-none 
-            w-full 
-            bg-white 
-            border-2 
-            border-blue-300 
-            rounded-lg 
-            pl-4 
-            pr-10 
-            py-3 
-            text-gray-700 
-            font-medium 
-            shadow-sm 
-            transition-all 
-            duration-300 
-            hover:border-blue-500 
-            focus:outline-none 
-            focus:ring-2 
-            focus:ring-blue-300 
-            focus:border-transparent 
-            cursor-pointer"
-          >
-            {categories.map((category, index) => (
-              <option
-                key={index}
-                value={category}
-                className="bg-white hover:bg-blue-50"
-              >
-                {category}
-              </option>
-            ))}
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-            <BiChevronDown size={20} className="text-blue-500" />
-          </div>
+    <div className="py-16">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div className="space-y-2">
+          <h2 className="text-3xl font-bold">Top Sellers</h2>
+          <p className="text-muted-foreground">
+            Discover our most popular books
+          </p>
         </div>
+
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Select Genre" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.map((category) => (
+              <SelectItem key={category} value={category}>
+                {category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
-      <Swiper
-        slidesPerView={1}
-        spaceBetween={30}
-        navigation={true}
-        breakpoints={{
-          640: {
-            slidesPerView: 1,
-            spaceBetween: 20,
-          },
-          768: {
-            slidesPerView: 2,
-            spaceBetween: 40,
-          },
-          1024: {
-            slidesPerView: 2,
-            spaceBetween: 50,
-          },
-          1180: {
-            slidesPerView: 3,
-            spaceBetween: 50,
-          },
-        }}
-        modules={[Pagination, Navigation]}
-        className="mySwiper"
-      >
-        {filteredBooks?.length! > 0 ? (
-          filteredBooks?.map((book, index) => (
-            <SwiperSlide key={index}>
-              <BookCard book={book} />
-            </SwiperSlide>
-          ))
-        ) : (
-          <p>
-            Sorry, no books in the category: <strong>{selectedCategory}</strong>
-          </p>
-        )}
-      </Swiper>
+      <div className="relative">
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={24}
+          navigation={true}
+          breakpoints={{
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 },
+          }}
+          modules={[Navigation, Pagination]}
+          className="!pb-12"
+        >
+          {filteredBooks?.length ? (
+            filteredBooks.map((book, index) => (
+              <SwiperSlide key={index}>
+                <BookCard book={book} />
+              </SwiperSlide>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">
+                No books found in {selectedCategory}
+              </p>
+            </div>
+          )}
+        </Swiper>
+      </div>
     </div>
   );
 };
