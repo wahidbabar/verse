@@ -1,28 +1,13 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Outlet } from "react-router-dom";
+import { Toaster } from "sonner";
 import "./App.css";
 import Footer from "./components/Footer";
-import Loading from "./components/Loading";
+import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import { QueryProvider } from "./providers/query-client";
-import { Toaster } from "sonner";
-import Navbar from "./components/Navbar";
 
 const App: FC = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <>
       <AuthProvider>

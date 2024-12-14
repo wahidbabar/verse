@@ -1,6 +1,4 @@
-import { useFetchBooks } from "@/api/books";
 import { IBook } from "@/api/types";
-import Loading from "@/components/Loading";
 import {
   Select,
   SelectContent,
@@ -8,9 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { mockBooks } from "@/utils/mockData";
-import { BookOpen } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -34,29 +30,8 @@ const categories = [
   "Self-Help",
 ];
 
-const TopSellers = () => {
+const TopSellers = ({ books }: { books: IBook[] }) => {
   const [selectedCategory, setSelectedCategory] = useState("All Genres");
-  const [books, setBooks] = useState<IBook[] | undefined>(mockBooks);
-  const { data, isLoading } = useFetchBooks();
-
-  useEffect(() => {
-    if (data) {
-      setBooks(data);
-    }
-  }, [data]);
-
-  if (!books && isLoading) return <Loading />;
-
-  if (!books) {
-    return (
-      <div className="flex items-center justify-center h-64 bg-muted/10 rounded-lg">
-        <div className="text-center space-y-2">
-          <BookOpen className="w-8 h-8 mx-auto text-muted-foreground" />
-          <p className="text-muted-foreground">No books available</p>
-        </div>
-      </div>
-    );
-  }
 
   const filteredBooks =
     selectedCategory === "All Genres"
