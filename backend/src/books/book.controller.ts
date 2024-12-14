@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import cloudinary from "../config/cloudinaryConfig";
 import Book from "./book.model";
+import fs from "fs";
 
 const postABook = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -33,6 +34,13 @@ const postABook = async (req: Request, res: Response): Promise<void> => {
 
     // Save book to database
     const savedBook = await newBook.save();
+
+    // Unlink (delete) the temporary file
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error("Error deleting temporary file:", err);
+      }
+    });
 
     res.status(201).json({
       message: "Book posted successfully",
